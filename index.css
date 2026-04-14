@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply font-sans bg-[#0a0a0a] text-[#d4d4d4];
+    margin: 0;
+    overflow-x: hidden;
+  }
+
+  /* Accessible focus rings */
+  *:focus { outline: none; }
+  *:focus-visible {
+    outline: 2px solid #f5c842;
+    outline-offset: 2px;
+  }
+
+  /* Smooth scrollbar */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #3a3a3a; }
+  * { scrollbar-width: thin; scrollbar-color: #2a2a2a transparent; }
+}
+
+.mono-font {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.line-numbers {
+  user-select: none;
+  @apply text-[#555555];
+}
+
+/* Skip link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: 0;
+  background: #f5c842;
+  color: #000;
+  padding: 8px 16px;
+  z-index: 9999;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+.skip-link:focus { top: 0; }
+
+/* Animate on scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Enhanced button focus states */
+button:focus-visible {
+  outline: 2px solid #f5c842;
+  outline-offset: 2px;
+}
+
+a:focus-visible {
+  outline: 2px solid #f5c842;
+  outline-offset: 2px;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced link hover states */
+a[role="button"]:hover,
+button:hover {
+  transition-duration: 200ms;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Selection highlight */
+::selection {
+  background-color: #f5c842;
+  color: #000;
+}
