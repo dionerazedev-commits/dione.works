@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
   body {
@@ -90,6 +91,16 @@ button:hover {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .motion-heading {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: inset(0) !important;
+  }
+
+  .scroll-progress {
+    display: none !important;
   }
 }
 

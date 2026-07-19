@@ -1,31 +1,39 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ArrowUpRight, X, ZoomIn } from 'lucide-react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { ArrowUpRight, Bot, Braces, BriefcaseBusiness, Check, Code2, Database, Download, Facebook, Github, Globe2, Instagram, Linkedin, Mail, Music2, Plug, Smartphone, Webhook as WebhookIcon, Workflow, X, ZoomIn, type LucideIcon } from 'lucide-react';
+import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion';
 
-// ─── Animation Variants ───────────────────────────────────────────────────────
+// - Animation Variants -
+
+const PREMIUM_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 20, filter: 'blur(6px)' },
+  hidden: { opacity: 0, y: 24, scale: 0.992 },
   visible: {
-    opacity: 1, y: 0, filter: 'blur(0px)',
-    transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1.0] },
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.82, ease: PREMIUM_EASE },
   },
 };
 
 const stagger = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
-};
-
-const headingReveal = {
-  hidden: { opacity: 0, y: 60, letterSpacing: '0.25em' },
+  hidden: {},
   visible: {
-    opacity: 1, y: 0, letterSpacing: '0em',
-    transition: { duration: 0.9, ease: [0.25, 0.1, 0.25, 1.0], staggerChildren: 0.02 },
+    transition: { delayChildren: 0.04, staggerChildren: 0.055 },
   },
 };
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+const headingReveal = {
+  hidden: { opacity: 0, y: 38, clipPath: 'inset(0 0 100% 0)' },
+  visible: {
+    opacity: 1,
+    y: 0,
+    clipPath: 'inset(0 0 0% 0)',
+    transition: { duration: 0.95, ease: PREMIUM_EASE },
+  },
+};
+
+// - Types -
 
 interface CaseStudy {
   overview: string;
@@ -50,7 +58,7 @@ interface ProjectData {
   caseStudy?: CaseStudy;
 }
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
+// - Data -
 
 const PROJECTS: ProjectData[] = [
   {
@@ -58,19 +66,19 @@ const PROJECTS: ProjectData[] = [
     imageUrl: 'https://lh3.googleusercontent.com/d/1ugBCixWhFkzd4NrFMaXzi4zAGp0_OdZz',
     tag: 'Zapier + Make.com',
     caseStudy: {
-      overview: 'Automated Content Repurposing Engine built in both Zapier and Make.com. Transforms raw audio/video files into 2 blog posts, Instagram & LinkedIn posts, plus logging — fully no-code with AI transcription, generation, conditional paths, and multi-platform distribution.',
-      problem: 'Content creators and teams spend 4–6 hours manually transcribing, rewriting, formatting, and posting each audio/video piece — leading to inconsistent output, burnout, delayed distribution, and missed reach across blogs and social channels.',
+      overview: 'Automated Content Repurposing Engine built in both Zapier and Make.com. Transforms raw audio/video files into 2 blog posts, Instagram & LinkedIn posts, plus logging - fully no-code with AI transcription, generation, conditional paths, and multi-platform distribution.',
+      problem: 'Content creators and teams spend 4-6 hours manually transcribing, rewriting, formatting, and posting each audio/video piece - leading to inconsistent output, burnout, delayed distribution, and missed reach across blogs and social channels.',
       solution: [
         'Trigger: New file in Google Drive / OneDrive folder',
-        'AI transcription → Generate 2 unique blog variants',
+        'AI transcription - Generate 2 unique blog variants',
         'Create platform-specific social posts (Instagram + LinkedIn)',
         'Log everything to Google Sheets',
         'Conditional Paths/Router: Filter by keywords or quality to control auto-posting',
         'Identical logic implemented in Zapier and Make.com with strong AI prompt engineering.',
       ],
       impact: [
-        'Reduced repurposing time from hours to ~5–10 minutes of review',
-        'Scaled output: 1 file → 2 blogs + 2 social posts + log automatically',
+        'Reduced repurposing time from hours to ~5-10 minutes of review',
+        'Scaled output: 1 file - 2 blogs + 2 social posts + log automatically',
         'Improved consistency, brand alignment, and weekly reach',
         'Enabled safe, reliable automation with filters preventing unwanted posts',
       ],
@@ -82,18 +90,18 @@ const PROJECTS: ProjectData[] = [
     tag: 'Zapier + Apollo.io',
     caseStudy: {
       overview: 'Automated B2B Lead Qualification & Outreach Workflow built in Zapier. Triggers in real-time via Webhooks, enriches leads using Apollo.io, scores/prioritizes based on firmographics (company size, revenue, industry fit), stores high-priority leads in SQL, notifies the sales team, and generates personalized email drafts via AI.',
-      problem: 'Sales teams receive real-time inbound leads but spend excessive time on manual enrichment, qualification, prioritization, and personalized outreach. Without automation, low-fit leads waste resources, high-value opportunities get delayed, and outreach lacks consistency — resulting in inefficient pipelines and lost revenue.',
+      problem: 'Sales teams receive real-time inbound leads but spend excessive time on manual enrichment, qualification, prioritization, and personalized outreach. Without automation, low-fit leads waste resources, high-value opportunities get delayed, and outreach lacks consistency - resulting in inefficient pipelines and lost revenue.',
       solution: [
         'Webhook trigger receives real-time lead data (name, email, company, size, website, source)',
         'Apollo.io enrichment: revenue, employee count, industry, tech stack via API',
-        'Scoring via Formatter + Paths by Zapier — based on company size, revenue bands, industry ICP match',
+        'Scoring via Formatter + Paths by Zapier - based on company size, revenue bands, industry ICP match',
         'High-priority path: save to SQL database, notify team, generate AI email draft',
         'Low-priority path: basic notification or log only',
         'AI by Zapier (OpenAI/Gemini) creates short, context-aware outreach emails',
       ],
       impact: [
         'Reduced manual lead processing from hours to seconds per lead',
-        'Automatically prioritized high-fit leads — focusing sales on the top 20–30% conversion potential',
+        'Automatically prioritized high-fit leads - focusing sales on the top 20-30% conversion potential',
         'Boosted outreach quality and response rates via AI-personalized, data-enriched email drafts',
         'Centralized SQL storage for clean reporting, CRM syncing, and pipeline analytics',
       ],
@@ -111,7 +119,7 @@ const PROJECTS: ProjectData[] = [
     tag: 'Make.com + Gemini AI',
     caseStudy: {
       overview: 'Intelligent Gmail Attachment Processor built with Make.com. Monitors incoming Gmail emails, analyzes attachments (PDFs, XLSX, CSV, DOCX) with Google Gemini AI, renames files descriptively based on content, uploads to Google Drive, logs details in Google Sheets, and optionally sends confirmation emails.',
-      problem: 'Manual handling of incoming email attachments was time-consuming and error-prone — requiring constant Gmail monitoring, manual renaming, uploading to the correct folder, and tracking. This led to delays, misfiled documents, lost time, and inconsistent organization.',
+      problem: 'Manual handling of incoming email attachments was time-consuming and error-prone - requiring constant Gmail monitoring, manual renaming, uploading to the correct folder, and tracking. This led to delays, misfiled documents, lost time, and inconsistent organization.',
       solution: [
         'Trigger: Gmail Watch Emails for new messages with attachments',
         'Extract: List attachments and download file data',
@@ -122,7 +130,7 @@ const PROJECTS: ProjectData[] = [
         'Notify (optional): Send Gmail confirmation after successful processing',
       ],
       impact: [
-        'Reduced manual processing from 5–10 minutes per attachment to near-zero hands-on time',
+        'Reduced manual processing from 5-10 minutes per attachment to near-zero hands-on time',
         'AI-driven renaming eliminated guesswork and ensured uniform, searchable filenames',
         'Centralized, properly named files in Drive + full audit trail in Sheets',
         'Handles high volumes 24/7 with zero missed files',
@@ -135,17 +143,17 @@ const PROJECTS: ProjectData[] = [
     tag: 'Make.com + Xero',
     caseStudy: {
       overview: 'Automated Xero General Ledger Attachment to Asana Tasks using Make.com. Triggers when an Asana task is marked complete, pulls detailed transaction data from Xero API, formats it into a standard CSV mirroring the Account Transactions report, and attaches the CSV directly to the completed Asana task for archival.',
-      problem: "Manual Xero report exports required logging in, navigating Reports > Account Transactions, filtering for the desired period, downloading CSV, and uploading to Asana — repetitive, time-consuming, and prone to oversight.",
+      problem: "Manual Xero report exports required logging in, navigating Reports > Account Transactions, filtering for the desired period, downloading CSV, and uploading to Asana - repetitive, time-consuming, and prone to oversight.",
       solution: [
         'Trigger: Asana Watch Completed Tasks',
         'Fetch Data: Xero API call to retrieve transaction-level data for the last calendar year',
         'Process & Format: Router, Iterators, Google Sheets staging, Text Aggregator to structure CSV',
-        'Attach: Asana Upload Attachment — CSV attached directly to the completed task',
+        'Attach: Asana Upload Attachment - CSV attached directly to the completed task',
         'Cleanup: Clear temp Google Sheets ranges and add logging/sleeps for reliability',
       ],
       impact: [
-        'Eliminated 10–20 minutes of manual Xero navigation per completed task',
-        'CSV mirrors exact Xero report format — zero formatting errors, reliable audit trail',
+        'Eliminated 10-20 minutes of manual Xero navigation per completed task',
+        'CSV mirrors exact Xero report format - zero formatting errors, reliable audit trail',
         'Automatic attachment ensures financial history is preserved in project context',
         'Handles multiple tasks daily with no added effort',
       ],
@@ -157,8 +165,8 @@ const PROJECTS: ProjectData[] = [
     tag: 'n8n + WhatsApp',
     caseStudy: {
       videoUrl: 'https://youtu.be/0Z0HgTMvg_U',
-      overview: 'A fully automated restaurant booking and inquiry system built with n8n that handles WhatsApp messages, AI-powered intent routing, booking management via Google Sheets, and multi-channel responses. Processes inquiries 24/7 with zero manual intervention—from customer message to confirmed booking automatically.',
-      problem: 'Restaurant staff waste hours answering the same questions outside business hours. Booking inquiries get missed, customers get ignored, and staff spends time manually managing bookings, cancellations, and complaints — leading to lost reservations, frustrated customers, and operational chaos.',
+      overview: 'A fully automated restaurant booking and inquiry system built with n8n that handles WhatsApp messages, AI-powered intent routing, booking management via Google Sheets, and multi-channel responses. Processes inquiries 24/7 with zero manual intervention-from customer message to confirmed booking automatically.',
+      problem: 'Restaurant staff waste hours answering the same questions outside business hours. Booking inquiries get missed, customers get ignored, and staff spends time manually managing bookings, cancellations, and complaints - leading to lost reservations, frustrated customers, and operational chaos.',
       solution: [
         'WhatsApp Webhook receives incoming messages in real-time',
         'AI Agent (Claude Sonnet) reads message and routes intent: booking, cancellation, complaint, or general inquiry',
@@ -171,11 +179,11 @@ const PROJECTS: ProjectData[] = [
       ],
       impact: [
         'Response time reduced from hours to under 30 seconds',
-        'Eliminated manual booking entry — 5+ API calls per booking automated',
+        'Eliminated manual booking entry - 5+ API calls per booking automated',
         'Handles cancellations, new bookings, and complaints autonomously',
         '24/7 availability: never miss a customer inquiry again',
         'Conversation memory provides customer context on every interaction',
-        'Staff only handles escalations — routine work fully automated',
+        'Staff only handles escalations - routine work fully automated',
         'Confirmed bookings written directly to Google Sheets',
       ],
     },
@@ -185,8 +193,8 @@ const PROJECTS: ProjectData[] = [
     imageUrl: 'https://lh3.googleusercontent.com/d/1iENI_54wQ7DnJ3xrRj1a6AAgFUIU9Kse',
     tag: 'n8n + AI',
     caseStudy: {
-      overview: 'Built with n8n. An intelligent automation pipeline that monitors incoming job requests via Messaging, scrapes tailored job listings, uses AI to customize resumes for each role, stores optimized versions in Google Drive, drafts personalized application emails, and sends completion reports — fully automated.',
-      problem: 'Manual job applications are highly repetitive and inefficient. Searching for listings, tailoring resumes to match job descriptions, organizing files, and writing customized emails take hours per application — leading to fatigue, inconsistent tailoring, and missed opportunities.',
+      overview: 'Built with n8n. An intelligent automation pipeline that monitors incoming job requests via Messaging, scrapes tailored job listings, uses AI to customize resumes for each role, stores optimized versions in Google Drive, drafts personalized application emails, and sends completion reports - fully automated.',
+      problem: 'Manual job applications are highly repetitive and inefficient. Searching for listings, tailoring resumes to match job descriptions, organizing files, and writing customized emails take hours per application - leading to fatigue, inconsistent tailoring, and missed opportunities.',
       solution: [
         'Triggers on Messaging job requests',
         'Scrapes and filters relevant job postings',
@@ -196,7 +204,7 @@ const PROJECTS: ProjectData[] = [
         'Notifies results via Messaging',
       ],
       impact: [
-        'Reduced application time from hours to minutes per job — enabling 10x more applications',
+        'Reduced application time from hours to minutes per job - enabling 10x more applications',
         'AI-driven tailoring improves ATS compatibility and interview callback rates',
         'Supports high-volume job searches while keeping applications professional and organized',
         'Frees up time for interviews, skill-building, and networking',
@@ -208,7 +216,7 @@ const PROJECTS: ProjectData[] = [
     imageUrl: 'https://lh3.googleusercontent.com/d/19LSO-CxBQUFNDZHi6ECzWgNallGZyNiQ',
     tag: 'n8n + Webhooks',
     caseStudy: {
-      overview: 'A fully autonomous, webhook-triggered AI agent built with n8n that handles incoming customer inquiries and applications. Classifies intent, answers FAQs in real time, extracts and structures application data, saves records cleanly, and sends personalized confirmation emails — all without human involvement.',
+      overview: 'A fully autonomous, webhook-triggered AI agent built with n8n that handles incoming customer inquiries and applications. Classifies intent, answers FAQs in real time, extracts and structures application data, saves records cleanly, and sends personalized confirmation emails - all without human involvement.',
       problem: 'Manual processing of customer inquiries and applications creates major bottlenecks: slow response times frustrate users and lose leads; inconsistent answers damage brand trust; fragmented data entry leads to errors; delayed follow-ups reduce conversion rates.',
       solution: [
         'Analyzes incoming messages with AI to detect intent',
@@ -220,9 +228,9 @@ const PROJECTS: ProjectData[] = [
       ],
       impact: [
         'Response time reduced from hours/days to under 10 seconds for most inquiries',
-        '100% structured data collection — eliminated missed or incomplete submissions',
-        'Removed 80–95% of repetitive inquiry/application handling work',
-        'Instant, consistent, professional communication → higher satisfaction and trust',
+        '100% structured data collection - eliminated missed or incomplete submissions',
+        'Removed 80-95% of repetitive inquiry/application handling work',
+        'Instant, consistent, professional communication - higher satisfaction and trust',
       ],
     },
   },
@@ -231,18 +239,18 @@ const PROJECTS: ProjectData[] = [
     imageUrl: 'https://lh3.googleusercontent.com/d/1n929yATdP0dtjO1ZEZoCRHvO1c9U6bUo',
     tag: 'n8n + Voice AI',
     caseStudy: {
-      overview: 'A production-grade, fully autonomous AI receptionist built with n8n exposing multiple webhook/API endpoints to handle real-time appointment workflows. Checks calendar availability, books new slots, updates or reschedules existing appointments, processes cancellations, and stores call recordings + metadata in Airtable — all without human intervention.',
-      problem: 'Traditional appointment scheduling via phone suffered from: long wait times and after-hours unavailability; human errors in double-booking; high staff burden for routine tasks; and limited scalability during peak demand — leading to lost bookings and frustrated customers.',
+      overview: 'A production-grade, fully autonomous AI receptionist built with n8n exposing multiple webhook/API endpoints to handle real-time appointment workflows. Checks calendar availability, books new slots, updates or reschedules existing appointments, processes cancellations, and stores call recordings + metadata in Airtable - all without human intervention.',
+      problem: 'Traditional appointment scheduling via phone suffered from: long wait times and after-hours unavailability; human errors in double-booking; high staff burden for routine tasks; and limited scalability during peak demand - leading to lost bookings and frustrated customers.',
       solution: [
-        'Get Availability — Real-time slot checking across calendars',
-        'Book Appointment — Validates input, creates calendar event, confirms via voice/text',
-        'Update Appointment — Modifies existing bookings with conflict detection',
-        'Cancel Appointment — Safely deletes/cancels slots and notifies parties',
-        'Call Logging — Automatically captures recordings and metadata in Airtable',
+        'Get Availability - Real-time slot checking across calendars',
+        'Book Appointment - Validates input, creates calendar event, confirms via voice/text',
+        'Update Appointment - Modifies existing bookings with conflict detection',
+        'Cancel Appointment - Safely deletes/cancels slots and notifies parties',
+        'Call Logging - Automatically captures recordings and metadata in Airtable',
       ],
       impact: [
-        '24/7 instant booking & management — no more missed after-hours opportunities',
-        'Eliminated 90–100% of routine phone and scheduling work',
+        '24/7 instant booking & management - no more missed after-hours opportunities',
+        'Eliminated 90-100% of routine phone and scheduling work',
         'Near-zero double-bookings or data-entry mistakes through automated validation',
         'Handles unlimited concurrent requests without adding headcount',
       ],
@@ -253,8 +261,8 @@ const PROJECTS: ProjectData[] = [
     imageUrl: 'https://lh3.googleusercontent.com/d/1nfdD2zKiYYTHTDn0PeO0WyxnaA5T_1B8',
     tag: 'n8n + Video AI',
     caseStudy: {
-      overview: 'A completely autonomous pipeline built with n8n that turns high-level ideas into ready-to-watch short-form ASMR videos and publishes them across platforms. Auto-generates creative prompts, renders videos using AI, validates output quality, converts formats, adds metadata, and uploads directly to YouTube and Facebook — fully hands-free.',
-      problem: 'Creating and distributing short-form ASMR content is extremely labor-intensive: manually writing detailed prompts; waiting for renders; checking quality; editing/exporting in correct formats; and uploading with metadata to multiple platforms — limiting output and causing burnout.',
+      overview: 'A completely autonomous pipeline built with n8n that turns high-level ideas into ready-to-watch short-form ASMR videos and publishes them across platforms. Auto-generates creative prompts, renders videos using AI, validates output quality, converts formats, adds metadata, and uploads directly to YouTube and Facebook - fully hands-free.',
+      problem: 'Creating and distributing short-form ASMR content is extremely labor-intensive: manually writing detailed prompts; waiting for renders; checking quality; editing/exporting in correct formats; and uploading with metadata to multiple platforms - limiting output and causing burnout.',
       solution: [
         'Generates varied, high-quality ASMR prompts (triggers, themes, durations)',
         'Submits to AI video generation engine and monitors rendering status',
@@ -265,7 +273,7 @@ const PROJECTS: ProjectData[] = [
       ],
       impact: [
         'From idea to published video in minutes instead of hours/days',
-        '10–30× increase in weekly content output',
+        '10-30× increase in weekly content output',
         'Eliminated 95%+ of manual creative and publishing labor',
         'Enables rapid experimentation and sustained high-frequency posting',
       ],
@@ -273,61 +281,202 @@ const PROJECTS: ProjectData[] = [
   },
 ];
 
-const FRONTEND_PROJECTS = [
+const LAAG_BUKIDNON_PROJECT = {
+  title: 'Laag Bukidnon',
+  link: 'https://laagbukidnon.vercel.app/',
+  description: 'A responsive tourism platform that helps travelers discover Bukidnon, plan trips, find stays, and travel with useful local context.',
+  problem: 'Bukidnon travel information is often scattered across social posts, operator pages, and disconnected guides, making it difficult to move from discovery to a practical trip plan.',
+  role: 'Product design, frontend development, and responsive UX',
+  stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Vercel'],
+  shipped: 'A live destination platform connecting discovery, maps, stays, practical travel guidance, and an Ask Bukid planning path.',
+  capabilities: [
+    {
+      label: 'Discover',
+      detail: 'Destinations, stays, guides, and travel essentials organized in one clear experience.',
+    },
+    {
+      label: 'Plan',
+      detail: 'Search and trip-planning paths designed to move travelers from inspiration to action.',
+    },
+    {
+      label: 'Ask Bukid',
+      detail: 'A conversational entry point for practical questions about exploring the province.',
+    },
+  ],
+};
+
+const MIGO_PROJECT = {
+  title: 'Migo',
+  link: 'https://migo-rust.vercel.app/',
+  description: 'A mobile-first travel app for planning with an AI travel buddy, organizing trips and expenses, tracking passport progress, and saving travel memories.',
+  problem: 'Trip planning is fragmented across chats, notes, budgets, maps, and social feeds, so the context travelers need rarely stays in one place.',
+  role: 'Product design, full-stack development, and AI integration',
+  stack: ['Expo', 'React Native', 'TypeScript', 'Supabase'],
+  shipped: 'A live mobile-first product that brings AI guidance, trips, expenses, passport progress, community rankings, and memories into one experience.',
+  screens: [
+    {
+      src: '/images/migo-ai-buddy.jpg',
+      alt: 'Migo AI travel buddy screen with trip planning prompts and a chat input',
+      label: 'AI travel buddy',
+    },
+    {
+      src: '/images/migo-trips.jpg',
+      alt: 'Migo Trips screen with travel passport progress, trip planning, and import options',
+      label: 'Trips and passport',
+    },
+    {
+      src: '/images/migo-leaderboards.jpg',
+      alt: 'Migo Explore leaderboard showing verified travel standings and province progress',
+      label: 'Explore leaderboards',
+    },
+    {
+      src: '/images/migo-profile.jpg',
+      alt: 'Migo Profile screen with travel statistics, check-in, passport, and memories',
+      label: 'Profile and memories',
+    },
+  ],
+};
+
+interface ProductProofProps {
+  project: {
+    problem: string;
+    role: string;
+    stack: string[];
+    shipped: string;
+  };
+  className?: string;
+}
+
+const ProductProof: React.FC<ProductProofProps> = ({ project, className = '' }) => (
+  <motion.div
+    variants={fadeUp}
+    className={`${className} grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 border-y border-[#242424] py-9`}
+  >
+    <div className="lg:col-span-5">
+      <p className="mono-font text-[10px] font-bold text-yellow-400 uppercase tracking-widest mb-3">The problem</p>
+      <p className="mono-font text-[13px] leading-relaxed text-neutral-400 max-w-[58ch]">{project.problem}</p>
+    </div>
+    <dl className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-7">
+      <div>
+        <dt className="mono-font text-[10px] font-bold text-neutral-600 uppercase tracking-widest mb-3">My role</dt>
+        <dd className="mono-font text-[12px] leading-relaxed text-neutral-300">{project.role}</dd>
+      </div>
+      <div>
+        <dt className="mono-font text-[10px] font-bold text-neutral-600 uppercase tracking-widest mb-3">Build stack</dt>
+        <dd className="mono-font text-[12px] leading-relaxed text-neutral-300">{project.stack.join(' / ')}</dd>
+      </div>
+      <div>
+        <dt className="mono-font text-[10px] font-bold text-neutral-600 uppercase tracking-widest mb-3">What shipped</dt>
+        <dd className="mono-font text-[12px] leading-relaxed text-neutral-300">{project.shipped}</dd>
+      </div>
+    </dl>
+  </motion.div>
+);
+
+interface TechItem {
+  name: string;
+  category: string;
+  logo?: string;
+  Icon?: LucideIcon;
+}
+
+interface TechGroup {
+  label: string;
+  description: string;
+  gridClass: string;
+  tools: TechItem[];
+}
+
+const TECH_GROUPS: TechGroup[] = [
   {
-    title: 'BookWise Pickleball',
-    link: 'https://book-wise-pickleball.vercel.app/',
-    description: 'Modern booking and reservation platform for sports facilities. Users can schedule court reservations, manage availability, and streamline bookings through a clean responsive interface.',
+    label: 'Full-Stack Development',
+    description: 'Product interfaces, mobile applications, and connected data layers.',
+    gridClass: 'grid-cols-2 sm:grid-cols-4',
+    tools: [
+      { name: 'React', category: 'Interface', logo: '/images/tech/react.svg' },
+      { name: 'Next.js', category: 'Framework', logo: '/images/tech/nextdotjs.svg' },
+      { name: 'TypeScript', category: 'Language', logo: '/images/tech/typescript.svg' },
+      { name: 'React Native', category: 'Mobile', logo: '/images/tech/react.svg' },
+      { name: 'Expo', category: 'Mobile', logo: '/images/tech/expo.svg' },
+      { name: 'Tailwind CSS', category: 'Styling', logo: '/images/tech/tailwindcss.svg' },
+      { name: 'Supabase', category: 'Backend', logo: '/images/tech/supabase.svg' },
+      { name: 'PostgreSQL', category: 'Database', logo: '/images/tech/postgresql.svg' },
+    ],
   },
   {
-    title: 'Flow Invoice',
-    link: 'https://flow-invoice-kit-khq6.vercel.app/',
-    description: 'Lightweight invoicing tool for generating professional invoices quickly. Structured layouts, automated calculations, and export-ready invoice formats for freelancers and businesses.',
+    label: 'AI & Automation',
+    description: 'Intelligent workflows, model integrations, and operational automation.',
+    gridClass: 'grid-cols-2 sm:grid-cols-3 2xl:grid-cols-6',
+    tools: [
+      { name: 'n8n', category: 'Automation', logo: '/images/tech/n8n.svg' },
+      { name: 'Make.com', category: 'Automation', logo: '/images/tech/make.svg' },
+      { name: 'Zapier', category: 'Automation', logo: '/images/tech/zapier.svg' },
+      { name: 'OpenAI', category: 'Model API', Icon: Bot },
+      { name: 'Claude', category: 'Model API', logo: '/images/tech/claude.svg' },
+      { name: 'Gemini', category: 'Model API', logo: '/images/tech/googlegemini.svg' },
+    ],
   },
   {
-    title: 'FlowMetrics Dashboard',
-    link: 'https://flowmetrics-saas-sim.vercel.app/',
-    description: 'SaaS-style analytics and automation dashboard to monitor workflows, track KPIs, and manage automated processes. Built for operational insights and real-time performance monitoring.',
-  },
-  {
-    title: 'RedditOps Dashboard',
-    link: 'https://reddit-ops-psi.vercel.app/',
-    description: 'Operations dashboard for monitoring Reddit community metrics, moderation activity, and engagement trends. Helps teams manage community growth and operational workflows.',
-  },
-  {
-    title: 'Nexus Analytics Platform',
-    link: 'https://nexus-analytics-zeta.vercel.app/',
-    description: 'Data analytics platform visualizing business metrics through modern dashboards and interactive components. Built to help teams understand trends, performance, and operational insights.',
+    label: 'Infrastructure & Integration',
+    description: 'Version control, deployment, and event-driven product connections.',
+    gridClass: 'grid-cols-2 sm:grid-cols-4',
+    tools: [
+      { name: 'Git / GitHub', category: 'Versioning', logo: '/images/tech/github.svg' },
+      { name: 'Vercel', category: 'Deployment', logo: '/images/tech/vercel.svg' },
+      { name: 'REST APIs', category: 'Integration', Icon: Braces },
+      { name: 'Webhooks', category: 'Events', Icon: WebhookIcon },
+    ],
   },
 ];
 
-const TECH_STACK = [
-  { name: 'Zapier', category: 'Automate', logo: 'https://cdn.simpleicons.org/zapier/FF6719' },
-  { name: 'Make.com', category: 'Automate', logo: 'https://cdn.simpleicons.org/make/6D28D9' },
-  { name: 'n8n', category: 'Automate', logo: 'https://cdn.simpleicons.org/n8n/FF6D5A' },
-  { name: 'Airtable', category: 'Data', logo: 'https://cdn.simpleicons.org/airtable/18BFFF' },
-  { name: 'Supabase', category: 'Data', logo: 'https://cdn.simpleicons.org/supabase/3ECF8E' },
-  { name: 'Google Sheets', category: 'Data', logo: 'https://cdn.simpleicons.org/googlesheets/34A853' },
-  { name: 'PostgreSQL', category: 'Data', logo: 'https://cdn.simpleicons.org/postgresql/336791' },
-  { name: 'Google WS', category: 'Suite', logo: 'https://lh3.googleusercontent.com/d/15VMe3gS36JAjrQ9UMJBsO3xPTPmYKMH7' },
-  { name: 'Gmail', category: 'Suite', logo: 'https://cdn.simpleicons.org/gmail/EA4335' },
-  { name: 'Google Drive', category: 'Suite', logo: 'https://cdn.simpleicons.org/googledrive/4285F4' },
-  { name: 'GoHighLevel', category: 'CRM', logo: 'https://lh3.googleusercontent.com/d/1dPxIfIDrY3drVBS30lwOf8fg_7UsFA4k' },
-  { name: 'Apollo.io', category: 'CRM', logo: 'https://cdn.simpleicons.org/apollo/000000', whiteBg: true },
-  { name: 'Xero', category: 'Finance', logo: 'https://cdn.simpleicons.org/xero/003B5C' },
-  { name: 'Base44', category: 'Data', logo: 'https://lh3.googleusercontent.com/d/1ThbF1QMghL4wukffYLVHcoIy95YG8DnM', whiteBg: true },
-  { name: 'Lovable', category: 'Low-Code', logo: 'https://lh3.googleusercontent.com/d/121v3K3Tv17wjguxy66RiQubeJ-_1pj94', whiteBg: true },
-  { name: 'Asana', category: 'Project', logo: 'https://cdn.simpleicons.org/asana/F06B66' },
-  { name: 'Calendly', category: 'Schedule', logo: 'https://cdn.simpleicons.org/calendly/006BFF' },
-  { name: 'OpenAI', category: 'AI', logo: 'https://lh3.googleusercontent.com/d/1GMkcA0JzpaxvV4Jo7orXs_kQI1c0ZB8n' },
-  { name: 'Claude', category: 'AI', logo: 'https://lh3.googleusercontent.com/d/1Hv-oN911Nij_AEBCknNvVcomm_sgv3lD' },
-  { name: 'Gemini', category: 'AI', logo: 'https://lh3.googleusercontent.com/d/1nrFbIXVW5pN6UlAm-N9kK8F3v5D0Z0vK' },
-  { name: 'JotForm', category: 'Forms', logo: 'https://lh3.googleusercontent.com/d/1-LtRBIHqmnLW60nC8SkjwvXN7KAEKFXY' },
-  { name: 'Mailgun', category: 'Email', logo: 'https://cdn.simpleicons.org/mailgun/E74C3C' },
-  { name: 'Webhook', category: 'API', logo: 'https://lh3.googleusercontent.com/d/15uSLQl14DqvU6479kRZlYqq-08O6hyi9' },
+interface ServiceOffering {
+  title: string;
+  description: string;
+  Icon: LucideIcon;
+  deliverables: string[];
+}
+
+const PRIMARY_SERVICES: ServiceOffering[] = [
+  {
+    title: 'AI Automation Systems',
+    description: 'Automations that move data, route decisions, and complete repetitive work across the tools your team already uses.',
+    Icon: Workflow,
+    deliverables: ['Workflow architecture', 'Model and API orchestration', 'Validation and error handling', 'Operational handoff'],
+  },
+  {
+    title: 'Full-Stack Product Development',
+    description: 'Web and mobile products with clear interfaces, secure data flows, and the infrastructure needed to keep them useful.',
+    Icon: Code2,
+    deliverables: ['React and Next.js applications', 'Expo and React Native apps', 'Supabase and PostgreSQL', 'Authentication and user accounts'],
+  },
 ];
 
-// ─── Sub-Components ───────────────────────────────────────────────────────────
+const SUPPORTING_SERVICES = [
+  {
+    title: 'AI Assistants & Agents',
+    description: 'Intent routing, useful responses, context handling, and tool calls.',
+    Icon: Bot,
+  },
+  {
+    title: 'Product Integrations',
+    description: 'Maps, location data, authentication, APIs, and third-party services.',
+    Icon: Plug,
+  },
+  {
+    title: 'Data & Product Operations',
+    description: 'Application schemas, internal workflows, content operations, and admin flows.',
+    Icon: Database,
+  },
+  {
+    title: 'Responsive Product UI',
+    description: 'Accessible interfaces designed for mobile, tablet, and desktop use.',
+    Icon: Smartphone,
+  },
+];
+
+const LINE_NUMBERS = Array.from({ length: 570 }, (_, index) => index + 1).join('\n');
+
+// - Sub-Components -
 
 const CaseStudyModal: React.FC<{
   isOpen: boolean;
@@ -427,7 +576,7 @@ const CaseStudyModal: React.FC<{
                     <ul className="space-y-3" aria-label={s.label}>
                       {(s.items as string[]).map((item, i) => (
                         <li key={i} className="flex items-start gap-3 mono-font text-[13px] text-neutral-400 leading-relaxed">
-                          <span className="text-yellow-400 flex-shrink-0 mt-[3px]" aria-hidden="true">—</span>
+                          <span className="text-yellow-400 flex-shrink-0 mt-[3px]" aria-hidden="true">-</span>
                           <span>{item}</span>
                         </li>
                       ))}
@@ -532,7 +681,7 @@ const ProjectCard: React.FC<{
         onKeyDown={handleKeyDown}
         tabIndex={0}
         role="button"
-        aria-label={`${title} — ${caseStudy ? 'click to view case study' : 'click to open project'}`}
+        aria-label={`${title} - ${caseStudy ? 'click to view case study' : 'click to open project'}`}
         className="flex items-start justify-between p-4 border-b border-[#1a1a1a] min-h-[72px] outline-none group-hover:border-[#1a1a1a] transition-colors"
       >
         <div className="flex-1">
@@ -542,7 +691,7 @@ const ProjectCard: React.FC<{
           <div className="mt-2 flex gap-1.5 flex-wrap">
             {caseStudy && (
               <span className="inline-flex items-center gap-1 text-[9px] mono-font font-bold text-green-400/80 bg-green-400/10 px-2 py-1 rounded">
-                <span aria-hidden="true">✓</span> Case Study
+                <span aria-hidden="true">--</span> Case Study
               </span>
             )}
             <span className="inline-flex items-center gap-1 text-[9px] mono-font font-bold text-yellow-400/80 bg-yellow-400/10 px-2 py-1 rounded">
@@ -599,52 +748,31 @@ const ProjectCard: React.FC<{
   );
 };
 
-const FrontendCard: React.FC<{ title: string; description: string; link: string }> = ({ title, description, link }) => (
-  <motion.a
-    variants={fadeUp}
-    href={link}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="flex flex-col border border-[#1e1e1e] bg-[#0c0c0c] hover:border-[#2a2a2a] hover:bg-[#0f0f0f] transition-all group h-full p-7 no-underline"
-    aria-label={`${title} — open live demo`}
-  >
-    <div className="flex justify-between items-start mb-5 gap-3">
-      <h3 className="text-[17px] font-bold text-white uppercase tracking-tighter leading-none">{title}</h3>
-      <div className="text-yellow-400 flex-shrink-0 mt-0.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" aria-hidden="true">
-        <ArrowUpRight size={20} />
-      </div>
-    </div>
-    <p className="mono-font text-[12px] text-neutral-500 leading-relaxed flex-1">{description}</p>
-    <div className="flex items-center justify-between mt-6 pt-5 border-t border-[#1a1a1a]">
-      <span className="mono-font text-[10px] text-neutral-600 uppercase tracking-widest group-hover:text-neutral-400 transition-colors flex items-center gap-1.5">
-        Live Demo <ArrowUpRight size={10} aria-hidden="true" />
-      </span>
-      <div className="w-2 h-2 rounded-full bg-yellow-400/15 group-hover:bg-yellow-400 transition-colors" aria-hidden="true" />
-    </div>
-  </motion.a>
-);
-
 const TechCard: React.FC<{
   name: string;
   category: string;
-  logo: string;
-  whiteBg?: boolean;
-}> = ({ name, category, logo, whiteBg }) => (
+  logo?: string;
+  Icon?: LucideIcon;
+}> = ({ name, category, logo, Icon }) => (
   <motion.div
     variants={fadeUp}
-    className="aspect-square border-r border-b border-[#1a1a1a] bg-[#0c0c0c] p-5 flex flex-col justify-between hover:bg-[#111] transition-colors group"
+    className="min-h-[132px] sm:min-h-[146px] border-r border-b border-[#1a1a1a] bg-[#0c0c0c] p-4 sm:p-5 flex flex-col justify-between hover:bg-[#111] transition-colors group"
     role="listitem"
-    aria-label={`${name} — ${category}`}
+    aria-label={`${name} - ${category}`}
   >
-    <span className="mono-font text-[10px] text-neutral-600 uppercase tracking-tight">{name}</span>
+    <span className="mono-font text-[10px] leading-tight text-neutral-500 uppercase tracking-tight">{name}</span>
     <div className="flex-1 flex items-center justify-center py-2">
-      <img
-        src={logo}
-        alt={`${name} logo`}
-        className={`w-10 h-10 object-contain grayscale group-hover:grayscale-0 transition-all duration-300 ${whiteBg ? 'bg-white rounded-md p-1.5' : ''}`}
-        loading="lazy"
-        referrerPolicy="no-referrer"
-      />
+      {logo ? (
+        <img
+          src={logo}
+          alt=""
+          className="w-9 h-9 object-contain opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300"
+          loading="lazy"
+          aria-hidden="true"
+        />
+      ) : Icon ? (
+        <Icon size={36} strokeWidth={1.5} className="text-neutral-400 opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300" aria-hidden="true" />
+      ) : null}
     </div>
     <span className="mono-font text-[9px] text-neutral-700 self-end uppercase tracking-widest">{category}</span>
   </motion.div>
@@ -682,7 +810,7 @@ const Testimonial: React.FC<{
   </motion.blockquote>
 );
 
-// ─── Main Export ──────────────────────────────────────────────────────────────
+// - Main Export -
 
 export const MainContent: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
@@ -690,6 +818,15 @@ export const MainContent: React.FC = () => {
   const [zoomedImage, setZoomedImage] = useState<{ url: string; title: string } | null>(null);
   const mainRef = useRef<HTMLElement | null>(null);
   const lastFocusedRef = useRef<HTMLElement | null>(null);
+  const { scrollYProgress } = useScroll({ container: mainRef });
+  const smoothScrollProgress = useSpring(scrollYProgress, {
+    stiffness: 95,
+    damping: 26,
+    mass: 0.28,
+  });
+  const progressOpacity = useTransform(smoothScrollProgress, [0, 0.012], [0, 1]);
+  const heroParallaxY = useTransform(smoothScrollProgress, [0, 0.075], [0, -34]);
+  const heroParallaxOpacity = useTransform(smoothScrollProgress, [0, 0.045, 0.09], [1, 0.88, 0.48]);
 
   const openCaseStudy = useCallback((project: ProjectData) => {
     lastFocusedRef.current = document.activeElement as HTMLElement;
@@ -702,54 +839,58 @@ export const MainContent: React.FC = () => {
     lastFocusedRef.current?.focus();
   }, []);
 
-  // All line numbers that scroll with the page
-  const lines = Array.from({ length: 570 }, (_, i) => i + 1);
-
   return (
     <main
       ref={mainRef}
       id="main-content"
-      className="flex-1 bg-[#0a0a0a] flex relative overflow-y-auto"
+      className="flex-1 bg-[#0a0a0a] flex relative overflow-y-auto overscroll-y-contain [scrollbar-gutter:stable]"
       tabIndex={-1}
     >
 
+      <motion.div
+        style={{ scaleX: smoothScrollProgress, opacity: progressOpacity }}
+        className="scroll-progress fixed top-[52px] left-0 md:left-72 right-0 z-40 h-[2px] origin-left bg-yellow-400 pointer-events-none"
+        aria-hidden="true"
+      />
+
       {/* Line Numbers */}
       <div
-        className="w-14 border-r border-[#1a1a1a] flex-shrink-0 py-8 hidden sm:flex flex-col items-center select-none bg-[#0a0a0a] z-10"
+        className="w-14 border-r border-[#1a1a1a] flex-shrink-0 py-8 hidden sm:flex justify-center items-start select-none bg-[#0a0a0a] z-10"
         aria-hidden="true"
       >
-        {lines.map((n) => (
-          <div key={n} className="line-numbers mono-font text-[11px] leading-[1.8] opacity-70">{n}</div>
-        ))}
+        <pre className="line-numbers mono-font text-[11px] leading-[1.8] opacity-70 m-0 w-full text-center whitespace-pre">
+          {LINE_NUMBERS}
+        </pre>
       </div>
 
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 [container-type:inline-size]">
 
-        {/* ── Hero ─────────────────────────────────────────────────────────── */}
+        {/* - Hero - */}
         <section
           id="home"
           className="p-8 lg:px-16 lg:py-24 min-h-[68vh] flex flex-col justify-center border-b border-[#1a1a1a]"
           aria-label="Introduction"
         >
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
-            <motion.div variants={fadeUp} className="mono-font text-neutral-600 mb-10 text-[12px] italic" aria-hidden="true">
-              {'/* Hero section */'}
-            </motion.div>
+          <motion.div style={{ y: heroParallaxY, opacity: heroParallaxOpacity }}>
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
+              <motion.div variants={fadeUp} className="mono-font text-neutral-600 mb-10 text-[12px] italic" aria-hidden="true">
+                {'/* Hero section */'}
+              </motion.div>
 
-            <motion.div variants={fadeUp} className="mb-10">
-              <h2 className="text-[clamp(48px,8vw,96px)] font-extrabold text-white leading-[0.87] tracking-tighter uppercase">
-                AI Automation
-              </h2>
-              <h2 className="text-[clamp(48px,8vw,96px)] font-extrabold text-neutral-700 leading-[0.87] tracking-tighter uppercase">
-                & Low-Code Dev
-              </h2>
-            </motion.div>
+              <motion.div variants={headingReveal} className="motion-heading mb-10">
+                <h2 className="text-[42px] md:text-[clamp(36px,11cqw,96px)] font-extrabold text-white leading-[0.87] tracking-tighter uppercase whitespace-nowrap">
+                  AI Automation
+                </h2>
+                <h2 className="text-[clamp(21px,6.8cqw,78px)] font-extrabold text-neutral-700 leading-[0.87] tracking-tighter uppercase whitespace-nowrap">
+                  & Full-Stack Developer
+                </h2>
+              </motion.div>
 
-            <motion.p variants={fadeUp} className="text-lg md:text-xl mono-font leading-relaxed text-neutral-500 max-w-2xl mb-10">
-              I build automation systems, dashboards, and workflows that eliminate manual work and scale your operations.
-            </motion.p>
+              <motion.p variants={fadeUp} className="text-lg md:text-xl mono-font leading-relaxed text-neutral-500 max-w-2xl mb-10">
+                I'm an AI automation and full-stack developer. I build intelligent workflows, modern web apps, and mobile products people actually use.
+              </motion.p>
 
-            <motion.div variants={fadeUp} className="flex gap-3 flex-wrap">
+              <motion.div variants={fadeUp} className="flex gap-3 flex-wrap">
               <button
                 onClick={() => {
                   const el = document.getElementById('work');
@@ -758,7 +899,7 @@ export const MainContent: React.FC = () => {
                 }}
                 className="inline-flex items-center gap-2 px-7 py-4 bg-yellow-400 hover:bg-yellow-300 text-black mono-font font-bold text-[11px] tracking-widest uppercase transition-all duration-200 min-h-[44px] shadow-lg hover:shadow-yellow-400/50 hover:shadow-2xl hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-400 group"
               >
-                <span>View Work</span>
+                <span>View Projects</span>
                 <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" aria-hidden="true" />
               </button>
               <button
@@ -772,11 +913,12 @@ export const MainContent: React.FC = () => {
                 <span>Get in Touch</span>
                 <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" aria-hidden="true" />
               </button>
+              </motion.div>
             </motion.div>
           </motion.div>
         </section>
 
-        {/* ── Impact Stats ──────────────────────────────────────────────────── */}
+        {/* - Impact Stats - */}
         <section
           className="p-8 lg:px-16 lg:py-16 border-b border-[#1a1a1a]"
           aria-labelledby="impact-heading"
@@ -784,10 +926,10 @@ export const MainContent: React.FC = () => {
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={stagger}>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
               {[
-                { label: '80-95%', desc: 'Time Saved' },
-                { label: '24/7', desc: 'Automation' },
-                { label: '8+', desc: 'Projects' },
-                { label: '100%', desc: 'Autonomous' },
+                { label: 'AI', desc: 'Automation Systems' },
+                { label: 'Web', desc: 'Full-Stack Apps' },
+                { label: 'API', desc: 'Connected Workflows' },
+                { label: 'Mobile', desc: 'First Products' },
               ].map((stat, i) => (
                 <motion.div
                   key={i}
@@ -802,55 +944,7 @@ export const MainContent: React.FC = () => {
           </motion.div>
         </section>
 
-        {/* ── Services ─────────────────────────────────────────────────────── */}
-        <section
-          id="what-i-do"
-          className="p-8 lg:px-16 lg:py-24 border-b border-[#1a1a1a]"
-          aria-labelledby="services-heading"
-        >
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.1 }} variants={stagger}>
-            <motion.div variants={fadeUp} className="mono-font text-neutral-600 mb-12 text-[12px] italic" aria-hidden="true">
-              {'/* Services */'}
-            </motion.div>
-
-            <div className="space-y-20">
-              {[
-                {
-                  label: '01. AI & Automation',
-                  items: ['Workflow Automation Architecture', 'AI Tool Integration', 'Prompt Engineering', 'Process Optimization Audit', 'Content Summarization Automations', 'Data Cleaning & Transformation'],
-                },
-                {
-                  label: '02. Low-Code Development',
-                  items: ['Modern Web Application Development', 'SaaS Dashboard Interfaces', 'Responsive UI / Mobile-First Design', 'Data Visualization Interfaces', 'API Integration for Low-Code Systems', 'Interactive User Experiences', 'Product Landing Pages', 'Booking & Reservation Platforms', 'Analytics & Operations Dashboards'],
-                },
-              ].map((group) => (
-                <div key={group.label} className="space-y-8">
-                  <motion.h2 variants={fadeUp} className="text-[clamp(24px,3.5vw,38px)] font-bold text-white uppercase tracking-tighter">
-                    {group.label}
-                  </motion.h2>
-                  <motion.ul
-                    variants={stagger}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-10"
-                    role="list"
-                  >
-                    {group.items.map((item, i) => (
-                      <motion.li
-                        key={i}
-                        variants={fadeUp}
-                        className="flex items-start gap-3 mono-font text-[13px] text-neutral-500 leading-relaxed border-b border-[#141414] pb-3 hover:text-neutral-300 transition-colors"
-                      >
-                        <span className="text-neutral-700 mt-0.5 flex-shrink-0" aria-hidden="true">—</span>
-                        {item}
-                      </motion.li>
-                    ))}
-                  </motion.ul>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </section>
-
-        {/* ── Featured Work ─────────────────────────────────────────────────── */}
+        {/* - Featured Work - */}
         <section
           id="work"
           className="p-6 lg:px-16 lg:py-16 border-b border-[#1a1a1a]"
@@ -930,244 +1024,232 @@ export const MainContent: React.FC = () => {
           </motion.div>
         </section>
 
-        {/* ── Low-Code Dev ─────────────────────────────────────────────────── */}
+        {/* - Low-Code Dev - */}
         <section
           id="frontend-dev"
-          className="p-8 lg:px-16 lg:py-24 border-b border-[#1a1a1a]"
+          className="p-6 sm:p-8 lg:px-16 lg:py-24 border-b border-[#1a1a1a] overflow-hidden"
           aria-labelledby="frontend-heading"
         >
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.05 }} variants={stagger}>
-            <motion.div variants={fadeUp} className="mono-font text-neutral-600 mb-12 text-[12px] italic" aria-hidden="true">
-              {'/* Low-Code Development Projects */'}
-            </motion.div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-16">
-              <div className="lg:col-span-4">
-                <motion.h2 id="frontend-heading" variants={fadeUp} className="text-[clamp(24px,3.5vw,36px)] font-bold text-white uppercase tracking-tighter mb-4">
-                  Low-Code Developer
-                </motion.h2>
-                <motion.div variants={fadeUp} className="w-10 h-[3px] bg-yellow-400" aria-hidden="true" />
-              </div>
-              <div className="lg:col-span-8">
-                <motion.p variants={fadeUp} className="text-[15px] mono-font leading-relaxed text-neutral-500">
-                  I build modern, responsive web applications and SaaS interfaces focused on automation, analytics, and productivity tools — clean UI, functional dashboards, and real-world business systems.
-                </motion.p>
-              </div>
+            <div className="max-w-5xl mb-12 lg:mb-16">
+              <motion.h2 id="frontend-heading" variants={headingReveal} className="motion-heading text-[clamp(32px,5vw,64px)] font-bold text-white tracking-tighter leading-[0.95] mb-5">
+                Travel Products in Practice
+              </motion.h2>
+              <motion.p variants={fadeUp} className="text-[15px] md:text-[16px] mono-font leading-relaxed text-neutral-400 max-w-3xl">
+                Migo supports the full trip journey. Laag Bukidnon makes local discovery and planning easier.
+              </motion.p>
             </div>
 
-            <motion.div
-              variants={stagger}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
-              role="list"
-              aria-label="Low-code development projects"
-            >
-              {FRONTEND_PROJECTS.map((p) => (
-                <FrontendCard key={p.title} {...p} />
-              ))}
-            </motion.div>
-          </motion.div>
-        </section>
+            <motion.article variants={stagger} className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+              <motion.div variants={fadeUp} className="lg:col-span-4 lg:pt-6">
+                <p className="mono-font text-[11px] text-yellow-400 uppercase tracking-widest font-bold mb-5">
+                  Local Tourism Platform
+                </p>
+                <h3 className="text-[clamp(34px,5vw,58px)] font-bold text-white tracking-tighter leading-[0.95] mb-6">
+                  {LAAG_BUKIDNON_PROJECT.title}
+                </h3>
+                <p className="text-[15px] mono-font leading-relaxed text-neutral-400 mb-9">
+                  {LAAG_BUKIDNON_PROJECT.description}
+                </p>
 
-        {/* ── Services & Offerings ──────────────────────────────────────────── */}
-        <section
-          id="services"
-          className="relative p-8 lg:px-16 lg:py-24 border-b border-[#1a1a1a] overflow-hidden"
-          aria-labelledby="services-heading"
-        >
-          <div className="absolute top-12 right-8 select-none pointer-events-none opacity-[0.04]" aria-hidden="true">
-            <span className="text-[200px] font-black leading-none text-white tracking-tighter">SERVICES</span>
-          </div>
-
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.1 }} variants={stagger}>
-            <div className="relative z-10 max-w-5xl">
-              <motion.div variants={fadeUp} className="mono-font text-neutral-600 mb-12 text-[12px] italic" aria-hidden="true">
-                {'/* What I Do */'}
+                <a
+                  href={LAAG_BUKIDNON_PROJECT.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 bg-yellow-400 hover:bg-yellow-300 active:translate-y-px text-black px-6 py-4 mono-font font-bold text-[11px] uppercase tracking-widest transition-all duration-200 min-h-[44px] whitespace-nowrap group"
+                  aria-label="Visit the live Laag Bukidnon website"
+                >
+                  Visit Live Site
+                  <ArrowUpRight size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" aria-hidden="true" />
+                </a>
               </motion.div>
 
-              <motion.h2 id="services-heading" variants={fadeUp} className="text-[clamp(48px,8vw,88px)] font-bold text-white tracking-tighter mb-16 leading-[0.9]">
-                Services & <span className="text-neutral-700">Solutions</span>
-              </motion.h2>
+              <motion.div variants={fadeUp} className="lg:col-span-8 grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_180px] gap-4 items-end">
+                <a
+                  href={LAAG_BUKIDNON_PROJECT.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block border border-[#242424] bg-[#101010] overflow-hidden group focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-yellow-400"
+                  aria-label="Open Laag Bukidnon desktop experience"
+                >
+                  <img
+                    src="/images/laag-bukidnon-desktop.jpg"
+                    alt="Laag Bukidnon desktop homepage showing the Bukidnon landscape and travel navigation"
+                    width="1440"
+                    height="1000"
+                    className="w-full h-auto object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.015] transition-all duration-500"
+                    loading="lazy"
+                  />
+                </a>
 
-              <motion.div
-                variants={stagger}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                role="list"
-                aria-label="Services offered"
-              >
-                {[
-                  {
-                    title: 'Workflow Automation',
-                    description: 'Build complete automation systems using Zapier, Make.com, n8n to eliminate manual work and scale operations.',
-                    icon: '⚙️',
-                    deliverables: ['Process automation', 'API integrations', 'Data routing'],
-                  },
-                  {
-                    title: 'AI-Powered Systems',
-                    description: 'Design intelligent automations leveraging AI (OpenAI, Gemini) for content generation, classification, and decision-making.',
-                    icon: '🤖',
-                    deliverables: ['AI workflows', 'ML-driven routing', 'Intelligent processing'],
-                  },
-                  {
-                    title: 'CRM & Business Logic',
-                    description: 'Integrate, automate, and optimize your CRM workflows — lead qualification, pipeline management, and customer data sync.',
-                    icon: '📊',
-                    deliverables: ['CRM integration', 'Lead management', 'Data sync'],
-                  },
-                  {
-                    title: 'Low-Code Web Apps',
-                    description: 'Build modern, responsive web applications and dashboards optimized for business automation and analytics.',
-                    icon: '🎨',
-                    deliverables: ['React web apps', 'Dashboards', 'SaaS tools'],
-                  },
-                  {
-                    title: 'Data Management',
-                    description: 'Design clean data pipelines with Google Sheets, SQL, Airtable — structure, log, and access business data reliably.',
-                    icon: '💾',
-                    deliverables: ['Data pipelines', 'Logging systems', 'Database design'],
-                  },
-                  {
-                    title: 'End-to-End Optimization',
-                    description: 'Full automation ecosystem design — from triggers to delivery — solving complex, multi-step business processes.',
-                    icon: '🔗',
-                    deliverables: ['Complex workflows', 'System design', 'Optimization'],
-                  },
-                ].map((service) => (
-                  <motion.div
-                    key={service.title}
-                    variants={fadeUp}
-                    className="group border border-[#1e1e1e] bg-[#0c0c0c] p-6 lg:p-8 hover:border-yellow-400/30 hover:bg-[#131313] transition-all duration-300 cursor-pointer relative overflow-hidden"
-                    role="listitem"
-                  >
-                    {/* Hover accent */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" aria-hidden="true" />
+                <div className="hidden md:block border border-[#242424] bg-[#101010] overflow-hidden translate-y-8">
+                  <img
+                    src="/images/laag-bukidnon-mobile.jpg"
+                    alt="Laag Bukidnon mobile homepage with destination search and responsive navigation"
+                    width="430"
+                    height="932"
+                    className="w-full h-auto object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              </motion.div>
 
-                    <div className="relative z-10">
-                      <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300 inline-block" aria-hidden="true">
-                        {service.icon}
-                      </div>
-                      <h3 className="text-[16px] font-bold text-white mb-3 group-hover:text-yellow-400 transition-colors">
-                        {service.title}
-                      </h3>
-                      <p className="text-[13px] mono-font text-neutral-500 mb-4 leading-relaxed">
-                        {service.description}
-                      </p>
-                      <div className="space-y-1 border-t border-[#1a1a1a] pt-4 mt-4">
-                        <p className="text-[11px] mono-font text-neutral-700 uppercase tracking-wider font-bold">Deliverables:</p>
-                        <ul className="space-y-1">
-                          {service.deliverables.map((d) => (
-                            <li key={d} className="text-[12px] mono-font text-neutral-600 group-hover:text-neutral-400 transition-colors">
-                              • {d}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
+              <motion.div variants={stagger} className="lg:col-span-12 grid grid-cols-1 md:grid-cols-3 gap-7 pt-8 border-t border-[#242424]">
+                {LAAG_BUKIDNON_PROJECT.capabilities.map((capability) => (
+                  <motion.div key={capability.label} variants={fadeUp} className="grid grid-cols-[88px_minmax(0,1fr)] md:grid-cols-1 gap-3 items-start">
+                    <span className="mono-font text-[11px] font-bold text-white uppercase tracking-wide">
+                      {capability.label}
+                    </span>
+                    <p className="mono-font text-[12px] leading-relaxed text-neutral-500 max-w-[30ch]">
+                      {capability.detail}
+                    </p>
                   </motion.div>
                 ))}
               </motion.div>
 
-              <motion.div variants={fadeUp} className="mt-20 pt-12 border-t border-[#1a1a1a]">
-                <p className="text-[15px] mono-font text-neutral-600 mb-6 max-w-3xl">
-                  Each project is custom-built to solve your specific problem. I work collaboratively to understand your goals, design the solution, and deliver a system that scales with your business.
+              <ProductProof project={LAAG_BUKIDNON_PROJECT} className="lg:col-span-12" />
+            </motion.article>
+
+            <motion.article variants={stagger} className="mt-24 lg:mt-32 pt-16 lg:pt-20 border-t border-[#242424]">
+              <motion.div variants={fadeUp} className="max-w-3xl mb-12">
+                <p className="mono-font text-[11px] text-yellow-400 uppercase tracking-widest font-bold mb-5">
+                  AI Travel Companion
+                </p>
+                <h3 className="text-[clamp(42px,7vw,76px)] font-bold text-white tracking-tighter leading-[0.95] mb-6">
+                  {MIGO_PROJECT.title}
+                </h3>
+                <p className="text-[15px] md:text-[16px] mono-font leading-relaxed text-neutral-400 max-w-2xl mb-9">
+                  {MIGO_PROJECT.description}
                 </p>
                 <a
-                  href="#contact-me"
-                  className="inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-4 px-8 mono-font text-[12px] uppercase tracking-wide transition-all duration-200 group hover:gap-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-400 shadow-lg hover:shadow-yellow-400/50 hover:shadow-2xl hover:-translate-y-1"
-                  aria-label="Schedule a consultation for services"
+                  href={MIGO_PROJECT.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 bg-yellow-400 hover:bg-yellow-300 active:translate-y-px text-black px-6 py-4 mono-font font-bold text-[11px] uppercase tracking-widest transition-all duration-200 min-h-[44px] whitespace-nowrap group"
+                  aria-label="Visit the live Migo app"
                 >
-                  <span>Start Your Project</span>
+                  Visit Live Site
                   <ArrowUpRight size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" aria-hidden="true" />
                 </a>
               </motion.div>
-            </div>
+
+              <motion.div
+                variants={stagger}
+                className="grid grid-cols-[repeat(4,minmax(260px,1fr))] md:grid-cols-2 xl:grid-cols-4 gap-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none pb-4 md:pb-0"
+                aria-label="Migo app screens"
+              >
+                {MIGO_PROJECT.screens.map((screen) => (
+                  <motion.figure key={screen.label} variants={fadeUp} className="snap-start min-w-0">
+                    <a
+                      href={MIGO_PROJECT.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block border border-[#242424] bg-[#101010] overflow-hidden group focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-yellow-400"
+                      aria-label={`Open Migo: ${screen.label}`}
+                    >
+                      <img
+                        src={screen.src}
+                        alt={screen.alt}
+                        width="700"
+                        height="1200"
+                        className="w-full aspect-[7/12] object-cover object-top opacity-90 group-hover:opacity-100 group-hover:scale-[1.015] transition-all duration-500"
+                        loading="lazy"
+                      />
+                    </a>
+                    <figcaption className="mono-font text-[11px] text-neutral-500 mt-4 uppercase tracking-wide">
+                      {screen.label}
+                    </figcaption>
+                  </motion.figure>
+                ))}
+              </motion.div>
+
+              <ProductProof project={MIGO_PROJECT} className="mt-12" />
+            </motion.article>
           </motion.div>
         </section>
 
-        {/* ── How I Work ────────────────────────────────────────────────────── */}
+        {/* - Services & Offerings - */}
         <section
-          id="how-it-works"
-          className="p-8 lg:px-16 lg:py-24 border-b border-[#1a1a1a]"
-          aria-labelledby="process-heading"
+          id="services"
+          className="relative p-6 sm:p-8 lg:px-16 lg:py-24 border-b border-[#1a1a1a]"
+          aria-labelledby="services-heading"
         >
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.1 }} variants={stagger}>
-            <motion.div variants={fadeUp} className="mono-font text-neutral-600 mb-12 text-[12px] italic" aria-hidden="true">
-              {'/* My Process */'}
-            </motion.div>
+          <span id="what-i-do" className="absolute -top-16" aria-hidden="true" />
 
-            <motion.h2 id="process-heading" variants={headingReveal} className="text-[clamp(48px,8vw,88px)] font-bold text-white tracking-tighter mb-16 leading-[0.9]">
-              How I <span className="text-neutral-700">Work</span>
-            </motion.h2>
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.08 }} variants={stagger}>
+            <div className="max-w-5xl mb-12 lg:mb-16">
+              <motion.h2 id="services-heading" variants={headingReveal} className="motion-heading text-[clamp(40px,6.5vw,76px)] font-bold text-white tracking-tighter leading-[0.94] mb-6 max-w-[12ch]">
+                From workflow logic to shipped products.
+              </motion.h2>
+              <motion.p variants={fadeUp} className="mono-font text-[14px] leading-relaxed text-neutral-500 max-w-2xl">
+                I design automation systems and full-stack applications, then connect the data, APIs, and AI behind them.
+              </motion.p>
+            </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 max-w-6xl">
-              {[
-                {
-                  step: '01',
-                  title: 'Discovery & Analysis',
-                  description: 'We deep-dive into your current processes, pain points, and goals. I document everything to ensure I build exactly what you need.',
-                  time: '1-2 weeks',
-                },
-                {
-                  step: '02',
-                  title: 'Design & Planning',
-                  description: 'I create a detailed automation blueprint showing workflows, integrations, data flow, and success metrics.',
-                  time: '1 week',
-                },
-                {
-                  step: '03',
-                  title: 'Build & Integration',
-                  description: 'I build, test, and integrate the automation system. You get daily progress updates and can request adjustments.',
-                  time: '2-4 weeks',
-                },
-                {
-                  step: '04',
-                  title: 'Deploy & Support',
-                  description: 'We go live together, train your team, and I provide ongoing support and optimization for 30 days post-launch.',
-                  time: 'Ongoing',
-                },
-              ].map((phase, idx) => (
-                <motion.div
-                  key={phase.step}
+            <motion.div variants={stagger} className="border-y border-[#242424]" role="list" aria-label="Core services">
+              {PRIMARY_SERVICES.map((service) => (
+                <motion.article
+                  key={service.title}
                   variants={fadeUp}
-                  className="group relative"
+                  className="group grid grid-cols-1 min-[1360px]:grid-cols-[64px_minmax(0,0.9fr)_minmax(340px,1.1fr)] gap-6 min-[1360px]:gap-10 py-9 lg:py-12 border-b border-[#242424] last:border-b-0 hover:bg-[#0d0d0d] transition-colors duration-300"
+                  role="listitem"
                 >
-                  {/* Connection line to next item */}
-                  {idx < 3 && (
-                    <div
-                      className="hidden lg:block absolute top-16 -right-4 w-8 h-[2px] bg-gradient-to-r from-yellow-400/50 to-transparent"
-                      aria-hidden="true"
-                    />
-                  )}
+                  <div className="w-14 h-14 border border-[#2a2a2a] flex items-center justify-center text-neutral-500 group-hover:text-yellow-400 group-hover:border-yellow-400/40 transition-colors" aria-hidden="true">
+                    <service.Icon size={25} strokeWidth={1.5} />
+                  </div>
 
-                  <div className="border border-[#1e1e1e] bg-[#0c0c0c] p-6 lg:p-8 hover:border-yellow-400/30 hover:bg-[#131313] transition-all duration-300 h-full">
-                    <h3 className="text-[16px] font-bold text-white mb-3 group-hover:text-yellow-400 transition-colors">
-                      {phase.title}
+                  <div>
+                    <h3 className="text-[clamp(22px,2.8vw,34px)] font-bold text-white tracking-tight leading-tight mb-4">
+                      {service.title}
                     </h3>
-                    <p className="text-[13px] mono-font text-neutral-500 leading-relaxed">
-                      {phase.description}
+                    <p className="mono-font text-[13px] leading-relaxed text-neutral-500 max-w-[48ch]">
+                      {service.description}
                     </p>
                   </div>
-                </motion.div>
-              ))}
-            </div>
 
-            <motion.div variants={fadeUp} className="mt-20 pt-12 border-t border-[#1a1a1a] max-w-4xl">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {[
-                  { label: 'Avg Project', value: '4-6 weeks' },
-                  { label: 'Success Rate', value: '100%' },
-                  { label: 'Client Satisfaction', value: '5/5 ⭐' },
-                ].map(({ label, value }) => (
-                  <div key={label}>
-                    <p className="text-[12px] mono-font text-neutral-600 uppercase tracking-widest mb-2">{label}</p>
-                    <p className="text-[24px] font-bold text-white">{value}</p>
-                  </div>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 self-center" aria-label={`${service.title} deliverables`}>
+                    {service.deliverables.map((deliverable) => (
+                      <li key={deliverable} className="flex items-start gap-3 mono-font text-[12px] leading-relaxed text-neutral-400">
+                        <Check size={14} strokeWidth={1.5} className="text-yellow-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
+                        <span>{deliverable}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.article>
+              ))}
+            </motion.div>
+
+            <motion.div variants={fadeUp} className="mt-14 lg:mt-20">
+              <h3 className="text-[20px] font-bold text-white mb-3">Supporting capabilities</h3>
+              <p className="mono-font text-[12px] leading-relaxed text-neutral-600 max-w-xl mb-8">
+                Focused technical work that supports the core build without becoming a separate engagement.
+              </p>
+
+              <motion.div variants={stagger} className="grid grid-cols-1 md:grid-cols-2 border-t border-[#242424]" role="list" aria-label="Supporting services">
+                {SUPPORTING_SERVICES.map((service, index) => (
+                  <motion.article
+                    key={service.title}
+                    variants={fadeUp}
+                    className={`group grid grid-cols-[44px_minmax(0,1fr)] gap-4 py-7 border-b border-[#242424] ${index % 2 === 0 ? 'md:pr-8 md:border-r' : 'md:pl-8'}`}
+                    role="listitem"
+                  >
+                    <service.Icon size={22} strokeWidth={1.5} className="text-neutral-600 group-hover:text-yellow-400 transition-colors mt-0.5" aria-hidden="true" />
+                    <div>
+                      <h4 className="text-[15px] font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">
+                        {service.title}
+                      </h4>
+                      <p className="mono-font text-[12px] text-neutral-500 leading-relaxed max-w-[46ch]">
+                        {service.description}
+                      </p>
+                    </div>
+                  </motion.article>
                 ))}
-              </div>
+              </motion.div>
             </motion.div>
           </motion.div>
         </section>
 
-        {/* ── About ─────────────────────────────────────────────────────────── */}
+        {/* - About - */}
         <section
           id="about-me"
           className="relative p-8 lg:px-16 lg:py-24 border-b border-[#1a1a1a] overflow-hidden"
@@ -1186,23 +1268,26 @@ export const MainContent: React.FC = () => {
 
             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
               <div className="lg:col-span-7">
-                <motion.h2 id="about-heading" variants={fadeUp} className="text-[clamp(36px,5.5vw,64px)] font-bold mb-10 leading-tight tracking-tighter">
+                <motion.h2 id="about-heading" variants={headingReveal} className="motion-heading text-[clamp(36px,5.5vw,64px)] font-bold mb-10 leading-tight tracking-tighter">
                   <span className="text-white">Automation</span>{' '}
                   <span className="text-neutral-600">Meets</span>
                   <br />
-                  <span className="text-white">Low-Code Systems</span>
+                  <span className="text-white">Full-Stack Products</span>
                 </motion.h2>
 
-                <motion.p variants={fadeUp} className="mono-font text-[14px] font-bold text-yellow-400 uppercase tracking-tight mb-5">
-                  Turning manual workflows into automated systems
+                <motion.p variants={fadeUp} className="mono-font text-[14px] md:text-[15px] font-bold leading-relaxed text-yellow-400 max-w-2xl mb-6">
+                  Turning my passion for technology and travel into meaningful digital experiences.
                 </motion.p>
 
-                <div className="space-y-5 max-w-2xl">
+                <div className="space-y-5 max-w-[68ch]">
                   <motion.p variants={fadeUp} className="text-[15px] md:text-[16px] mono-font leading-relaxed text-neutral-500">
-                    I build automation systems that remove repetitive work and simplify operations. From workflows and CRM integrations to dashboards and internal tools, I create complete systems that help businesses run faster and more efficiently.
+                    I'm a 19-year-old AI automation and full-stack developer who loves building, exploring new ideas, and traveling to new places. I'm passionate about using AI and technology to solve real-world problems and create products that people can actually use.
                   </motion.p>
                   <motion.p variants={fadeUp} className="text-[15px] md:text-[16px] mono-font leading-relaxed text-neutral-500">
-                    Using Zapier, Make, n8n, APIs, and low-code tools, I turn manual processes into scalable systems — building both the automation and the tools teams use every day.
+                    Projects like <strong className="font-bold text-neutral-300">Migo</strong> and <strong className="font-bold text-neutral-300">Laag Bukidnon</strong> bring my interests together—combining my love for travel with AI, automation, and full-stack development. I work with tools like React, Supabase, APIs, conversational AI, and workflow automation to turn ideas into functional digital experiences.
+                  </motion.p>
+                  <motion.p variants={fadeUp} className="text-[15px] md:text-[16px] mono-font leading-relaxed text-neutral-500">
+                    For me, every project is an opportunity to learn, build something meaningful, and keep exploring—both in technology and around the world.
                   </motion.p>
                 </div>
               </div>
@@ -1210,8 +1295,8 @@ export const MainContent: React.FC = () => {
               <motion.div variants={fadeUp} className="lg:col-span-5 lg:sticky lg:top-24">
                 <div className="border border-[#1e1e1e] overflow-hidden group">
                   <img
-                    src="https://i.imgur.com/nd8aQcp.jpeg"
-                    alt="Dione Raze Oro, automation developer based in Davao City, Philippines"
+                    src="/images/dione-profile.jpg"
+                    alt="Dione Raze Oro, AI automation and full-stack developer based in Davao City, Philippines"
                     className="w-full aspect-square object-cover grayscale opacity-85 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-[1.03] transition-all duration-700"
                   />
                 </div>
@@ -1220,7 +1305,7 @@ export const MainContent: React.FC = () => {
           </motion.div>
         </section>
 
-        {/* ── Tech Stack ────────────────────────────────────────────────────── */}
+        {/* - Tech Stack - */}
         <section
           id="tech-stack"
           className="p-8 lg:px-16 lg:py-24 border-b border-[#1a1a1a]"
@@ -1230,23 +1315,45 @@ export const MainContent: React.FC = () => {
             <motion.div variants={fadeUp} className="mono-font text-neutral-600 mb-12 text-[12px] italic" aria-hidden="true">
               {'/* Technical tools */'}
             </motion.div>
-            <motion.h2 id="stack-heading" variants={fadeUp} className="text-[clamp(24px,3.5vw,36px)] font-bold text-white uppercase tracking-tighter mb-10">
+            <motion.h2 id="stack-heading" variants={headingReveal} className="motion-heading text-[clamp(24px,3.5vw,36px)] font-bold text-white uppercase tracking-tighter mb-10">
               Tech Stack
             </motion.h2>
-            <motion.div
-              variants={stagger}
-              className="border-l border-t border-[#1a1a1a] grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7"
-              role="list"
-              aria-label="Technologies I work with"
-            >
-              {TECH_STACK.map((t) => (
-                <TechCard key={t.name} name={t.name} category={t.category} logo={t.logo} whiteBg={t.whiteBg} />
+            <motion.p variants={fadeUp} className="mono-font text-[13px] leading-relaxed text-neutral-500 max-w-2xl mb-14">
+              A focused toolkit for building full-stack products, AI-powered workflows, and reliable integrations.
+            </motion.p>
+
+            <motion.div variants={stagger} className="space-y-12">
+              {TECH_GROUPS.map((group, index) => (
+                <motion.section key={group.label} variants={fadeUp} aria-labelledby={`tech-group-${index}`}>
+                  <div className="border-t border-[#242424] pt-5 mb-5">
+                    <div className="flex items-baseline gap-4 mb-2">
+                      <span className="mono-font text-[10px] text-yellow-400" aria-hidden="true">0{index + 1}</span>
+                      <h3 id={`tech-group-${index}`} className="mono-font text-[13px] font-bold text-white uppercase tracking-wide">
+                        {group.label}
+                      </h3>
+                    </div>
+                    <p className="mono-font text-[11px] leading-relaxed text-neutral-600 max-w-xl pl-8">
+                      {group.description}
+                    </p>
+                  </div>
+
+                  <motion.div
+                    variants={stagger}
+                    className={`border-l border-t border-[#1a1a1a] grid ${group.gridClass}`}
+                    role="list"
+                    aria-label={`${group.label} technologies`}
+                  >
+                    {group.tools.map((tool) => (
+                      <TechCard key={tool.name} {...tool} />
+                    ))}
+                  </motion.div>
+                </motion.section>
               ))}
             </motion.div>
           </motion.div>
         </section>
 
-        {/* ── Certifications ───────────────────────────────────────────────── */}
+        {/* - Certifications - */}
         <section
           id="awards"
           className="p-8 lg:px-16 lg:py-24 border-b border-[#1a1a1a]"
@@ -1256,7 +1363,7 @@ export const MainContent: React.FC = () => {
             <motion.div variants={fadeUp} className="mono-font text-neutral-600 mb-12 text-[12px] italic" aria-hidden="true">
               {'/* Certifications & Credentials */'}
             </motion.div>
-            <motion.h2 id="certs-heading" variants={fadeUp} className="text-[clamp(24px,3.5vw,36px)] font-bold text-white uppercase tracking-tighter mb-12">
+            <motion.h2 id="certs-heading" variants={headingReveal} className="motion-heading text-[clamp(24px,3.5vw,36px)] font-bold text-white uppercase tracking-tighter mb-12">
               Professional Credentials
             </motion.h2>
 
@@ -1286,7 +1393,7 @@ export const MainContent: React.FC = () => {
           </motion.div>
         </section>
 
-        {/* ── Testimonials ─────────────────────────────────────────────────── */}
+        {/* - Testimonials - */}
         <section
           id="client-s-word"
           className="relative p-8 lg:px-16 lg:py-32 border-b border-[#1a1a1a] overflow-hidden"
@@ -1301,11 +1408,11 @@ export const MainContent: React.FC = () => {
             </motion.div>
             <motion.h2
               id="feedback-heading"
-              variants={fadeUp}
+              variants={headingReveal}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="text-[clamp(56px,9vw,88px)] font-black text-white tracking-tighter uppercase"
+              className="motion-heading text-[clamp(56px,9vw,88px)] font-black text-white tracking-tighter uppercase"
             >
               Feedback
             </motion.h2>
@@ -1328,7 +1435,7 @@ export const MainContent: React.FC = () => {
           </div>
         </section>
 
-        {/* ── Contact ──────────────────────────────────────────────────────── */}
+        {/* - Contact - */}
         <section
           id="contact-me"
           className="p-8 lg:px-16 lg:py-24"
@@ -1341,9 +1448,9 @@ export const MainContent: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
               <div>
-                <motion.h2 id="contact-heading" variants={fadeUp} className="text-[clamp(48px,8vw,88px)] font-bold text-white leading-[0.88] tracking-tighter uppercase mb-10">
-                  Let's Build<br />
-                  <span className="text-neutral-800">Together</span>
+                <motion.h2 id="contact-heading" variants={headingReveal} className="motion-heading text-[clamp(48px,8vw,88px)] font-bold text-white leading-[0.88] tracking-tighter uppercase mb-10">
+                  Build Smarter<br />
+                  <span className="text-neutral-800">Digital Products</span>
                 </motion.h2>
 
                 <motion.div variants={fadeUp} className="space-y-5 mb-10">
@@ -1355,7 +1462,7 @@ export const MainContent: React.FC = () => {
                     className="flex items-center justify-between gap-3 bg-yellow-400 hover:bg-yellow-300 text-black mono-font font-bold text-[12px] px-6 py-4 min-h-[44px] uppercase tracking-wide transition-all duration-200 group shadow-lg hover:shadow-yellow-400/50 hover:shadow-2xl hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-400"
                     aria-label="Schedule a 30-minute consultation call"
                   >
-                    <span>📅 Schedule a Call</span>
+                    <span>Schedule a Call</span>
                     <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" aria-hidden="true" />
                   </a>
 
@@ -1363,20 +1470,26 @@ export const MainContent: React.FC = () => {
                   <div className="space-y-2">
                     <p className="text-[12px] mono-font text-neutral-600 uppercase tracking-widest font-bold mb-3">Or reach out directly:</p>
                     {[
-                      { href: 'mailto:dioneoro11@gmail.com', label: 'Email', text: 'dioneoro11@gmail.com', icon: '✉️' },
-                      { href: 'https://www.linkedin.com/in/dione-raze-oro-b274a8243/', label: 'LinkedIn', text: 'LinkedIn', icon: '💼' },
-                      { href: 'https://www.onlinejobs.ph/jobseekers/info/2465090', label: 'OnlineJobsPH', text: 'OnlineJobsPH Profile', icon: '🌐' },
-                      { href: 'https://www.upwork.com/freelancers/~019d50a01f575c8779', label: 'Upwork', text: 'Upwork Profile', icon: '🚀' },
-                    ].map(({ href, label, text, icon }) => (
+                      { href: 'mailto:dioneoro11@gmail.com', label: 'Email', text: 'dioneoro11@gmail.com', Icon: Mail },
+                      { href: '/dione-raze-oro-resume.pdf', label: 'Resume', text: 'Download Resume', Icon: Download, download: true },
+                      { href: 'https://github.com/dionerazedev-commits', label: 'GitHub', text: 'GitHub Profile', Icon: Github },
+                      { href: 'https://www.linkedin.com/in/dione-raze-oro-b274a8243/', label: 'LinkedIn', text: 'LinkedIn Profile', Icon: Linkedin },
+                      { href: 'https://www.instagram.com/dnrze_/', label: 'Instagram', text: '@dnrze_', Icon: Instagram },
+                      { href: 'https://www.tiktok.com/@raze.ventures', label: 'TikTok', text: '@raze.ventures', Icon: Music2 },
+                      { href: 'https://www.facebook.com/raze.dodot/', label: 'Facebook', text: 'raze.dodot', Icon: Facebook },
+                      { href: 'https://www.onlinejobs.ph/jobseekers/info/2465090', label: 'OnlineJobsPH', text: 'OnlineJobsPH Profile', Icon: Globe2 },
+                      { href: 'https://www.upwork.com/freelancers/~019d50a01f575c8779', label: 'Upwork', text: 'Upwork Profile', Icon: BriefcaseBusiness },
+                    ].map(({ href, label, text, Icon, download }) => (
                       <a
                         key={label}
                         href={href}
+                        download={download || undefined}
                         target={href.startsWith('http') ? '_blank' : undefined}
                         rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                        className="flex items-center gap-3 mono-font text-[13px] text-neutral-600 hover:text-white hover:bg-white/5 transition-all group py-3 px-3 rounded min-h-[44px] border border-transparent hover:border-neutral-700"
+                        className="flex items-center gap-3 mono-font text-[13px] text-neutral-600 hover:text-white hover:bg-white/5 transition-all group py-3 px-3 min-h-[44px] border border-transparent hover:border-neutral-700"
                         aria-label={label}
                       >
-                        <span aria-hidden="true">{icon}</span>
+                        <Icon size={16} aria-hidden="true" />
                         <span>{text}</span>
                         <ArrowUpRight size={12} className="ml-auto group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-yellow-400" aria-hidden="true" />
                       </a>

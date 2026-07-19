@@ -3,9 +3,9 @@ import { motion, animate } from 'framer-motion';
 
 const LINKS = [
   { label: 'Home', id: 'home' },
-  { label: 'Services', id: 'what-i-do' },
   { label: 'Work', id: 'work' },
-  { label: 'Low-Code', id: 'frontend-dev' },
+  { label: 'Travel Tech', id: 'frontend-dev' },
+  { label: 'Services', id: 'services' },
   { label: 'About', id: 'about-me' },
   { label: 'Stack', id: 'tech-stack' },
   { label: 'Certs', id: 'awards' },

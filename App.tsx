@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { MotionConfig } from 'framer-motion';
 import { SidebarLeft } from './components/SidebarLeft';
 import { SidebarRight } from './components/SidebarRight';
 import { Navbar } from './components/Navbar';
@@ -8,13 +9,6 @@ import { ChatAssistant } from './components/ChatAssistant';
 
 const App: React.FC = () => {
   const [currentTime, setCurrentTime] = useState<string>('');
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('theme');
-      if (saved === 'light' || saved === 'dark') return saved;
-    }
-    return 'dark';
-  });
 
   useEffect(() => {
     const update = () => {
@@ -32,20 +26,12 @@ const App: React.FC = () => {
     return () => clearInterval(id);
   }, []);
 
-  useEffect(() => {
-    const root = document.documentElement;
-    root.classList.toggle('dark', theme === 'dark');
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => setTheme(p => (p === 'light' ? 'dark' : 'light'));
-
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       {/* Accessibility: skip nav */}
       <a href="#main-content" className="skip-link">Skip to main content</a>
 
-      <div className="flex flex-col h-screen overflow-hidden bg-white text-black dark:bg-[#0a0a0a] dark:text-[#d4d4d4] transition-colors duration-300">
+      <div className="flex flex-col h-screen overflow-hidden bg-[#0a0a0a] text-[#d4d4d4]">
         <div className="flex flex-1 overflow-hidden">
           <SidebarLeft />
 
@@ -66,7 +52,7 @@ const App: React.FC = () => {
 
       {/* AI Chat Assistant */}
       <ChatAssistant />
-    </>
+    </MotionConfig>
   );
 };
 
