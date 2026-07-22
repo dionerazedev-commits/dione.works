@@ -50,7 +50,7 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      {/* AI Chat Assistant */}
+      {/* Portfolio assistant */}
       <ChatAssistant />
     </MotionConfig>
   );

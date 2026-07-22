@@ -1470,7 +1470,7 @@ export const MainContent: React.FC = () => {
                   <div className="space-y-2">
                     <p className="text-[12px] mono-font text-neutral-600 uppercase tracking-widest font-bold mb-3">Or reach out directly:</p>
                     {[
-                      { href: 'mailto:dioneoro11@gmail.com', label: 'Email', text: 'dioneoro11@gmail.com', Icon: Mail },
+                      { href: 'mailto:dioneraze.dev@gmail.com', label: 'Email', text: 'dioneraze.dev@gmail.com', Icon: Mail },
                       { href: '/dione-raze-oro-resume.pdf', label: 'Resume', text: 'Download Resume', Icon: Download, download: true },
                       { href: 'https://github.com/dionerazedev-commits', label: 'GitHub', text: 'GitHub Profile', Icon: Github },
                       { href: 'https://www.linkedin.com/in/dione-raze-oro-b274a8243/', label: 'LinkedIn', text: 'LinkedIn Profile', Icon: Linkedin },

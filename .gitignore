@@ -12,6 +12,20 @@ dist
 dist-ssr
 *.local
 
+# Environment files
+.env
+.env.*
+!.env.example
+
+# AI assistant workspace files
+.agents/
+.claude/
+skills-lock.json
+
+# Test and tooling output
+coverage/
+.eslintcache
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

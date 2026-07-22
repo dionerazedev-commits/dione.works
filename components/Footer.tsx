@@ -35,7 +35,7 @@ export const Footer: React.FC = () => {
           <Linkedin size={15} aria-hidden="true" />
         </a>
         <a
-          href="mailto:dioneoro11@gmail.com"
+          href="mailto:dioneraze.dev@gmail.com"
           className="hover:text-white transition-colors p-1.5 min-w-[44px] min-h-[44px] flex items-center justify-center"
           aria-label="Send email to Dione"
         >

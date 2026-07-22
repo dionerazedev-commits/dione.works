@@ -6,12 +6,11 @@ interface Message {
   id: string;
   type: 'user' | 'bot';
   text: string;
-  timestamp: number;
 }
 
 const BOT_RESPONSES = {
   greeting: [
-    "Hi, I'm Dione's portfolio assistant. Ask me about AI automation, full-stack applications, Migo, or Laag Bukidnon.",
+    "Hi, I'm Dione's portfolio assistant. Ask me about automation, full-stack applications, Migo, or Laag Bukidnon.",
     "Welcome. I can walk you through Dione's automation systems, full-stack products, featured projects, and development approach.",
   ],
   about: "Dione Raze Oro is an AI automation and full-stack developer based in the Philippines. He builds intelligent workflows, connected web applications, conversational assistants, and scalable digital products.",
@@ -112,8 +111,7 @@ export const ChatAssistant: React.FC = () => {
     {
       id: '1',
       type: 'bot',
-      text: BOT_RESPONSES.greeting[Math.floor(Math.random() * BOT_RESPONSES.greeting.length)],
-      timestamp: Date.now(),
+      text: BOT_RESPONSES.greeting[0],
     },
   ]);
   const [input, setInput] = useState('');
@@ -136,7 +134,6 @@ export const ChatAssistant: React.FC = () => {
       id: Date.now().toString(),
       type: 'user',
       text: text.trim(),
-      timestamp: Date.now(),
     };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
@@ -151,7 +148,6 @@ export const ChatAssistant: React.FC = () => {
       id: (Date.now() + 1).toString(),
       type: 'bot',
       text: botText,
-      timestamp: Date.now(),
     };
 
     setMessages(prev => [...prev, botMessage]);
@@ -191,7 +187,7 @@ export const ChatAssistant: React.FC = () => {
             <div className="flex items-center justify-between p-4 border-b border-[#1e1e1e] bg-[#0f0f0f]">
               <div className="flex-1">
                 <h2 id="chat-title" className="mono-font text-[12px] font-bold text-white uppercase tracking-widest">
-                  Dione's AI & Full-Stack Assistant
+                  Dione's Portfolio Assistant
                 </h2>
                 <p className="mono-font text-[10px] text-neutral-500 mt-1">Always online</p>
               </div>

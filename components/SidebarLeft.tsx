@@ -46,11 +46,11 @@ export const SidebarLeft: React.FC = () => {
           <li className="flex items-start gap-3 mono-font text-[12px] text-neutral-500">
             <Mail size={15} className="mt-0.5 flex-shrink-0 opacity-50" aria-hidden="true" />
             <a
-              href="mailto:dioneoro11@gmail.com"
+              href="mailto:dioneraze.dev@gmail.com"
               className="hover:text-white transition-colors underline-offset-2 hover:underline"
-              aria-label="Email Dione at dioneoro11@gmail.com"
+              aria-label="Email Dione at dioneraze.dev@gmail.com"
             >
-              dioneoro11@gmail.com
+              dioneraze.dev@gmail.com
             </a>
           </li>
         </ul>
