@@ -1158,7 +1158,7 @@ export const MainContent: React.FC = () => {
                   AI Automation
                 </h2>
                 <h2 data-gsap-hero-line className="text-[clamp(21px,6.8cqw,78px)] font-extrabold text-neutral-700 leading-[0.87] tracking-tighter uppercase whitespace-nowrap">
-                  & Full-Stack Engineer
+                  & Software Engineer
                 </h2>
               </div>
 
