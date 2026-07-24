@@ -1163,7 +1163,7 @@ export const MainContent: React.FC = () => {
               </div>
 
               <p data-gsap-hero-copy className="text-lg md:text-xl mono-font leading-relaxed text-neutral-500 max-w-2xl mb-10">
-                I'm an AI automation and full-stack developer. I build intelligent workflows, modern web apps, and mobile products people actually use.
+                I'm an AI automation and software engineer. I build intelligent workflows, modern web apps, and mobile products people actually use.
               </p>
 
               <div data-gsap-hero-actions className="relative z-10 grid w-full max-w-[380px] grid-cols-1 gap-3 sm:flex sm:max-w-none">
