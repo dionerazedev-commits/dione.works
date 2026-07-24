@@ -308,33 +308,42 @@ const LAAG_BUKIDNON_PROJECT = {
 const MIGO_PROJECT = {
   title: 'Migo',
   link: 'https://migo-rust.vercel.app/',
-  description: 'A mobile-first travel app for planning with an AI travel buddy, organizing trips and expenses, tracking passport progress, and saving travel memories.',
+  description: 'A mobile-first travel platform combining trip planning, AI assistance, travel tracking, social discovery, and personal memories in one connected experience.',
+  note: 'Independent product concept designed and developed as a full-stack travel application.',
   problem: 'Trip planning is fragmented across chats, notes, budgets, maps, and social feeds, so the context travelers need rarely stays in one place.',
   role: 'Product design, full-stack development, and AI integration',
   stack: ['Expo', 'React Native', 'TypeScript', 'Supabase'],
   shipped: 'A live mobile-first product that brings AI guidance, trips, expenses, passport progress, community rankings, and memories into one experience.',
-  screens: [
+  posters: [
     {
-      src: '/images/migo-ai-buddy.jpg',
-      alt: 'Migo AI travel buddy screen with trip planning prompts and a chat input',
-      label: 'AI travel buddy',
+      src: '/images/projects/migo-ai-travel-buddy.webp',
+      alt: 'Migo promotional poster introducing the AI travel buddy with route, budget, packing, and local discovery tools',
+      label: 'Meet your AI travel buddy',
     },
     {
-      src: '/images/migo-trips.jpg',
-      alt: 'Migo Trips screen with travel passport progress, trip planning, and import options',
-      label: 'Trips and passport',
+      src: '/images/projects/migo-plan-every-trip.webp',
+      alt: 'Migo promotional poster showing trip planning, itinerary organization, and travel passport progress',
+      label: 'Plan every trip with clarity',
     },
     {
-      src: '/images/migo-leaderboards.jpg',
-      alt: 'Migo Explore leaderboard showing verified travel standings and province progress',
-      label: 'Explore leaderboards',
+      src: '/images/projects/migo-explore-stories.webp',
+      alt: 'Migo promotional poster showing travel stories, verified progress, and leaderboard standings',
+      label: 'Explore stories and see your standing',
     },
     {
-      src: '/images/migo-profile.jpg',
-      alt: 'Migo Profile screen with travel statistics, check-in, passport, and memories',
-      label: 'Profile and memories',
+      src: '/images/projects/migo-travel-identity.webp',
+      alt: 'Migo promotional poster showing a traveler profile, check-ins, passport progress, and personal memories',
+      label: 'Build your travel identity',
     },
   ],
+};
+
+const NARRA_ESTATES_PROJECT = {
+  title: 'Narra Estates',
+  liveUrl: 'https://narra-estates.vercel.app/',
+  sourceUrl: 'https://github.com/dionerazedev/narra-estates',
+  description: 'A cinematic luxury real estate concept that combines editorial property storytelling, responsive discovery tools, accessible inquiry flows, and restrained scroll-driven animation.',
+  technologies: ['Next.js', 'TypeScript', 'GSAP', 'ScrollTrigger', 'Lenis', 'Tailwind CSS', 'Playwright'],
 };
 
 interface ProductProofProps {
@@ -647,6 +656,105 @@ const ImageLightbox: React.FC<{
         </div>
       )}
     </AnimatePresence>
+  );
+};
+
+type MigoPoster = (typeof MIGO_PROJECT.posters)[number];
+
+interface MigoPosterShowcaseProps {
+  posters: MigoPoster[];
+  onPreview: (url: string, title: string) => void;
+}
+
+const MigoPosterShowcase: React.FC<MigoPosterShowcaseProps> = ({ posters, onPreview }) => {
+  const [[currentIndex, direction], setCurrent] = useState<[number, number]>([0, 0]);
+  const currentPoster = posters[currentIndex];
+
+  const paginate = (step: number) => {
+    setCurrent(([index]) => [
+      (index + step + posters.length) % posters.length,
+      step,
+    ]);
+  };
+
+  if (!currentPoster) {
+    return (
+      <div className="border-y border-[#242424] py-12 text-center" role="status">
+        <p className="mono-font text-[11px] uppercase tracking-widest text-neutral-600">Poster preview unavailable</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative w-full max-w-[560px] h-[460px] sm:h-[500px] xl:h-[520px] mx-auto" aria-label="Migo product poster viewer">
+      <div className="absolute inset-y-6 left-1/2 w-[58%] max-w-[320px] -translate-x-1/2 rotate-[1deg] border border-[#222] bg-[#0d0d0d]" aria-hidden="true" />
+      <div className="absolute inset-y-6 left-1/2 w-[58%] max-w-[320px] -translate-x-1/2 -rotate-[1deg] border border-[#282828] bg-[#101010]" aria-hidden="true" />
+
+      <div className="absolute inset-x-0 inset-y-5 flex items-center justify-center px-14 sm:px-16">
+        <AnimatePresence initial={false} mode="wait" custom={direction}>
+          <motion.button
+            key={currentPoster.src}
+            type="button"
+            custom={direction}
+            initial={{ opacity: 0, x: direction * 22, rotate: direction * 0.6 }}
+            animate={{ opacity: 1, x: 0, rotate: 0 }}
+            exit={{ opacity: 0, x: direction * -22, rotate: direction * -0.6 }}
+            whileHover={{ y: -4 }}
+            whileTap={{ scale: 0.99 }}
+            transition={{ type: 'spring', stiffness: 180, damping: 24 }}
+            onClick={() => onPreview(currentPoster.src, currentPoster.label)}
+            onKeyDown={(event) => {
+              if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                paginate(-1);
+              }
+              if (event.key === 'ArrowRight') {
+                event.preventDefault();
+                paginate(1);
+              }
+            }}
+            className="relative block h-full max-h-[500px] overflow-hidden border border-[#343434] bg-[#101010] text-left shadow-[0_24px_55px_-28px_rgba(0,0,0,0.9)] hover:border-neutral-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-yellow-400"
+            aria-label={`Enlarge ${currentPoster.label} poster. Use left and right arrow keys to change poster.`}
+          >
+            <img
+              src={currentPoster.src}
+              alt={currentPoster.alt}
+              width="941"
+              height="1672"
+              className="block h-full w-auto max-w-full object-contain"
+              loading="lazy"
+              sizes="(max-width: 767px) 260px, 290px"
+            />
+          </motion.button>
+        </AnimatePresence>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => paginate(-1)}
+        className="absolute left-0 sm:left-1 top-1/2 -translate-y-1/2 w-12 h-12 border border-[#343434] bg-[#0d0d0d] text-neutral-400 hover:border-neutral-500 hover:text-white active:scale-[0.98] mono-font text-lg transition-colors"
+        aria-label="Show previous Migo poster"
+      >
+        ←
+      </button>
+      <button
+        type="button"
+        onClick={() => paginate(1)}
+        className="absolute right-0 sm:right-1 top-1/2 -translate-y-1/2 w-12 h-12 bg-yellow-400 text-[#0a0a0a] hover:bg-yellow-300 active:scale-[0.98] mono-font text-lg transition-colors"
+        aria-label="Show next Migo poster"
+      >
+        →
+      </button>
+
+      <p className="absolute right-0 top-0 mono-font text-[10px] text-neutral-500 tabular-nums" aria-live="polite">
+        <span className="text-white">{String(currentIndex + 1).padStart(2, '0')}</span>
+        <span className="mx-2 text-neutral-700">/</span>
+        {String(posters.length).padStart(2, '0')}
+      </p>
+      <p className="absolute left-0 top-0 max-w-[24ch] mono-font text-[10px] text-neutral-500 uppercase tracking-wide" aria-live="polite">
+        {currentPoster.label}
+      </p>
+    </div>
   );
 };
 
@@ -1027,11 +1135,19 @@ export const MainContent: React.FC = () => {
         {/* - Low-Code Dev - */}
         <section
           id="frontend-dev"
-          className="p-6 sm:p-8 lg:px-16 lg:py-24 border-b border-[#1a1a1a] overflow-hidden"
+          className="p-6 sm:p-8 lg:px-16 lg:py-20 border-b border-[#1a1a1a] overflow-hidden"
           aria-labelledby="frontend-heading"
         >
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.05 }} variants={stagger}>
-            <div className="max-w-5xl mb-12 lg:mb-16">
+            <div className="max-w-5xl mb-10 lg:mb-12 pb-9 lg:pb-10 border-b border-[#242424]">
+              <motion.div variants={fadeUp} className="flex items-center justify-between gap-6 mb-6">
+                <p className="mono-font text-[10px] text-yellow-400 uppercase tracking-widest font-bold">
+                  Product Collection
+                </p>
+                <p className="mono-font text-[10px] text-neutral-700 uppercase tracking-widest tabular-nums" aria-label="Two live travel products">
+                  02 / Live Products
+                </p>
+              </motion.div>
               <motion.h2 id="frontend-heading" variants={headingReveal} className="motion-heading text-[clamp(32px,5vw,64px)] font-bold text-white tracking-tighter leading-[0.95] mb-5">
                 Travel Products in Practice
               </motion.h2>
@@ -1040,7 +1156,7 @@ export const MainContent: React.FC = () => {
               </motion.p>
             </div>
 
-            <motion.article variants={stagger} className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+            <motion.article variants={stagger} className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
               <motion.div variants={fadeUp} className="lg:col-span-4 lg:pt-6">
                 <p className="mono-font text-[11px] text-yellow-400 uppercase tracking-widest font-bold mb-5">
                   Local Tourism Platform
@@ -1048,15 +1164,18 @@ export const MainContent: React.FC = () => {
                 <h3 className="text-[clamp(34px,5vw,58px)] font-bold text-white tracking-tighter leading-[0.95] mb-6">
                   {LAAG_BUKIDNON_PROJECT.title}
                 </h3>
-                <p className="text-[15px] mono-font leading-relaxed text-neutral-400 mb-9">
+                <p className="text-[15px] mono-font leading-relaxed text-neutral-400 mb-6">
                   {LAAG_BUKIDNON_PROJECT.description}
+                </p>
+                <p className="border-l border-[#3a3a3a] pl-4 mono-font text-[11px] leading-relaxed text-neutral-600 mb-9">
+                  Independent destination platform designed to turn local discovery into a practical trip-planning path.
                 </p>
 
                 <a
                   href={LAAG_BUKIDNON_PROJECT.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 bg-yellow-400 hover:bg-yellow-300 active:translate-y-px text-black px-6 py-4 mono-font font-bold text-[11px] uppercase tracking-widest transition-all duration-200 min-h-[44px] whitespace-nowrap group"
+                  className="inline-flex w-full sm:w-auto items-center justify-center gap-3 bg-yellow-400 hover:bg-yellow-300 active:translate-y-px text-black px-6 py-4 mono-font font-bold text-[11px] uppercase tracking-widest transition-all duration-200 min-h-[44px] whitespace-nowrap group"
                   aria-label="Visit the live Laag Bukidnon website"
                 >
                   Visit Live Site
@@ -1064,33 +1183,50 @@ export const MainContent: React.FC = () => {
                 </a>
               </motion.div>
 
-              <motion.div variants={fadeUp} className="lg:col-span-8 grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_180px] gap-4 items-end">
-                <a
-                  href={LAAG_BUKIDNON_PROJECT.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block border border-[#242424] bg-[#101010] overflow-hidden group focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-yellow-400"
-                  aria-label="Open Laag Bukidnon desktop experience"
-                >
-                  <img
-                    src="/images/laag-bukidnon-desktop.jpg"
-                    alt="Laag Bukidnon desktop homepage showing the Bukidnon landscape and travel navigation"
-                    width="1440"
-                    height="1000"
-                    className="w-full h-auto object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.015] transition-all duration-500"
-                    loading="lazy"
-                  />
-                </a>
+              <motion.div variants={fadeUp} className="lg:col-span-8 min-w-0">
+                <div className="flex items-center justify-between gap-4 border-y border-[#242424] py-3 mb-5">
+                  <p className="mono-font text-[9px] text-neutral-500 uppercase tracking-widest">
+                    Responsive destination experience
+                  </p>
+                  <p className="mono-font text-[9px] text-neutral-700 uppercase tracking-widest whitespace-nowrap">
+                    Desktop / Mobile
+                  </p>
+                </div>
 
-                <div className="hidden md:block border border-[#242424] bg-[#101010] overflow-hidden translate-y-8">
-                  <img
-                    src="/images/laag-bukidnon-mobile.jpg"
-                    alt="Laag Bukidnon mobile homepage with destination search and responsive navigation"
-                    width="430"
-                    height="932"
-                    className="w-full h-auto object-cover"
-                    loading="lazy"
-                  />
+                <div className="relative sm:pb-14">
+                  <a
+                    href={LAAG_BUKIDNON_PROJECT.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block sm:w-[92%] border border-[#2b2b2b] bg-[#101010] overflow-hidden group shadow-[0_24px_55px_-32px_rgba(0,0,0,0.9)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-yellow-400"
+                    aria-label="Open Laag Bukidnon desktop experience"
+                  >
+                    <img
+                      src="/images/laag-bukidnon-desktop.jpg"
+                      alt="Laag Bukidnon desktop homepage showing the Bukidnon landscape and travel navigation"
+                      width="1440"
+                      height="1000"
+                      className="w-full aspect-[16/10] object-cover object-top opacity-90 group-hover:opacity-100 group-hover:scale-[1.012] transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transform-none"
+                      loading="lazy"
+                    />
+                  </a>
+
+                  <a
+                    href={LAAG_BUKIDNON_PROJECT.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-[48%] ml-auto mt-4 sm:mt-0 sm:absolute sm:right-0 sm:bottom-0 sm:w-[27%] border border-[#343434] bg-[#101010] overflow-hidden group shadow-[0_24px_55px_-24px_rgba(0,0,0,0.92)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-yellow-400"
+                    aria-label="Open Laag Bukidnon mobile experience"
+                  >
+                    <img
+                      src="/images/laag-bukidnon-mobile.jpg"
+                      alt="Laag Bukidnon mobile homepage with destination search and responsive navigation"
+                      width="430"
+                      height="932"
+                      className="w-full h-auto object-contain opacity-95 group-hover:opacity-100 group-hover:scale-[1.012] transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transform-none"
+                      loading="lazy"
+                    />
+                  </a>
                 </div>
               </motion.div>
 
@@ -1110,60 +1246,161 @@ export const MainContent: React.FC = () => {
               <ProductProof project={LAAG_BUKIDNON_PROJECT} className="lg:col-span-12" />
             </motion.article>
 
-            <motion.article variants={stagger} className="mt-24 lg:mt-32 pt-16 lg:pt-20 border-t border-[#242424]">
-              <motion.div variants={fadeUp} className="max-w-3xl mb-12">
+            <motion.article variants={stagger} className="mt-24 lg:mt-32 pt-16 lg:pt-20 border-t border-[#242424] grid grid-cols-1 xl:grid-cols-12 gap-10 xl:gap-12 items-start">
+              <motion.div variants={fadeUp} className="xl:col-span-4 xl:pt-5">
                 <p className="mono-font text-[11px] text-yellow-400 uppercase tracking-widest font-bold mb-5">
                   AI Travel Companion
                 </p>
-                <h3 className="text-[clamp(42px,7vw,76px)] font-bold text-white tracking-tighter leading-[0.95] mb-6">
+                <h3 className="text-[clamp(42px,6vw,68px)] font-bold text-white tracking-tighter leading-[0.95] mb-6">
                   {MIGO_PROJECT.title}
                 </h3>
-                <p className="text-[15px] md:text-[16px] mono-font leading-relaxed text-neutral-400 max-w-2xl mb-9">
+                <p className="text-[15px] mono-font leading-relaxed text-neutral-400 max-w-[50ch] mb-6">
                   {MIGO_PROJECT.description}
                 </p>
+                <p className="border-l border-[#3a3a3a] pl-4 mono-font text-[11px] leading-relaxed text-neutral-600 mb-9">
+                  {MIGO_PROJECT.note}
+                </p>
+
+                <div className="flex flex-col sm:flex-row xl:flex-col min-[1650px]:flex-row gap-3 items-stretch sm:items-start xl:items-stretch min-[1650px]:items-start">
+                  <a
+                    href={MIGO_PROJECT.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-full sm:w-auto xl:w-full min-[1650px]:w-auto items-center justify-center gap-3 bg-yellow-400 hover:bg-yellow-300 active:translate-y-px text-black px-6 py-4 mono-font font-bold text-[11px] uppercase tracking-widest transition-all duration-200 min-h-[44px] whitespace-nowrap group"
+                    aria-label="Visit the live Migo app"
+                  >
+                    View Live Site
+                    <ArrowUpRight size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" aria-hidden="true" />
+                  </a>
+                  <a
+                    href="https://github.com/dionerazedev/migo"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-full sm:w-auto xl:w-full min-[1650px]:w-auto items-center justify-center gap-3 border border-[#3a3a3a] hover:border-neutral-300 active:translate-y-px text-neutral-300 hover:text-white px-6 py-4 mono-font font-bold text-[11px] uppercase tracking-widest transition-all duration-200 min-h-[44px] whitespace-nowrap group"
+                    aria-label="View the Migo source code on GitHub"
+                  >
+                    View Source
+                    <ArrowUpRight size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" aria-hidden="true" />
+                  </a>
+                </div>
+              </motion.div>
+
+              <motion.div variants={fadeUp} className="xl:col-span-8 min-w-0">
+                <MigoPosterShowcase
+                  posters={MIGO_PROJECT.posters}
+                  onPreview={(url, title) => setZoomedImage({ url, title })}
+                />
+              </motion.div>
+
+              <div id="migo-case-study" className="xl:col-span-12 scroll-mt-8">
+                <ProductProof project={MIGO_PROJECT} />
+              </div>
+            </motion.article>
+          </motion.div>
+        </section>
+
+        {/* - Digital Experiences - */}
+        <section
+          id="digital-experiences"
+          className="p-6 sm:p-8 lg:px-16 lg:py-24 border-b border-[#1a1a1a] overflow-hidden"
+          aria-labelledby="digital-experiences-heading"
+        >
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.05 }} variants={stagger}>
+            <div className="max-w-5xl mb-12 lg:mb-16">
+              <motion.h2 id="digital-experiences-heading" variants={headingReveal} className="motion-heading text-[clamp(32px,5vw,64px)] font-bold text-white tracking-tighter leading-[0.95] mb-5">
+                Digital Experiences in Practice
+              </motion.h2>
+              <motion.p variants={fadeUp} className="text-[15px] md:text-[16px] mono-font leading-relaxed text-neutral-400 max-w-3xl">
+                Selected frontend experiences built around strong visual systems, responsive interaction, and practical product functionality.
+              </motion.p>
+            </div>
+
+            <motion.article variants={stagger} className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+              <motion.div variants={fadeUp} className="lg:col-span-4 lg:pt-6">
+                <p className="mono-font text-[11px] text-yellow-400 uppercase tracking-widest font-bold mb-5">
+                  Luxury Real Estate Concept
+                </p>
+                <h3 className="text-[clamp(38px,5vw,62px)] font-bold text-white tracking-tighter leading-[0.95] mb-6">
+                  {NARRA_ESTATES_PROJECT.title}
+                </h3>
+                <p className="text-[15px] mono-font leading-relaxed text-neutral-400 mb-6">
+                  {NARRA_ESTATES_PROJECT.description}
+                </p>
+                <p className="border-l border-[#3a3a3a] pl-4 mono-font text-[11px] leading-relaxed text-neutral-600 mb-9">
+                  Fictional concept project created for design and development demonstration.
+                </p>
+
+                <div className="flex flex-col sm:flex-row lg:flex-col min-[1500px]:flex-row gap-3 items-start">
+                  <a
+                    href={NARRA_ESTATES_PROJECT.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-3 bg-yellow-400 hover:bg-yellow-300 active:translate-y-px text-black px-6 py-4 mono-font font-bold text-[11px] uppercase tracking-widest transition-all duration-200 min-h-[44px] whitespace-nowrap group"
+                    aria-label="Visit the live Narra Estates website"
+                  >
+                    Visit Live Site
+                    <ArrowUpRight size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" aria-hidden="true" />
+                  </a>
+                  <a
+                    href={NARRA_ESTATES_PROJECT.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-3 border border-[#3a3a3a] hover:border-neutral-300 active:translate-y-px text-neutral-300 hover:text-white px-6 py-4 mono-font font-bold text-[11px] uppercase tracking-widest transition-all duration-200 min-h-[44px] whitespace-nowrap group"
+                    aria-label="View the Narra Estates source code on GitHub"
+                  >
+                    View Source
+                    <ArrowUpRight size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" aria-hidden="true" />
+                  </a>
+                </div>
+              </motion.div>
+
+              <motion.div variants={fadeUp} className="lg:col-span-8 relative md:pb-16">
                 <a
-                  href={MIGO_PROJECT.link}
+                  href={NARRA_ESTATES_PROJECT.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 bg-yellow-400 hover:bg-yellow-300 active:translate-y-px text-black px-6 py-4 mono-font font-bold text-[11px] uppercase tracking-widest transition-all duration-200 min-h-[44px] whitespace-nowrap group"
-                  aria-label="Visit the live Migo app"
+                  className="block md:w-[91%] border border-[#242424] bg-[#101010] overflow-hidden group focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-yellow-400"
+                  aria-label="Open the Narra Estates Azure Cliffs homepage"
                 >
-                  Visit Live Site
-                  <ArrowUpRight size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" aria-hidden="true" />
+                  <img
+                    src="/images/projects/narra-estates-desktop.webp"
+                    alt="Narra Estates luxury real estate concept homepage featuring Azure Cliffs"
+                    width="1600"
+                    height="900"
+                    className="w-full h-auto object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.015] transition-all duration-500"
+                    loading="lazy"
+                  />
+                </a>
+
+                <a
+                  href={`${NARRA_ESTATES_PROJECT.liveUrl}properties/azure-cliffs`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block mt-4 md:mt-0 md:absolute md:right-0 md:bottom-0 md:w-[42%] border border-[#2d2d2d] bg-[#101010] overflow-hidden group focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-yellow-400"
+                  aria-label="Open the Narra Estates Azure Cliffs property detail"
+                >
+                  <img
+                    src="/images/projects/narra-estates-detail.webp"
+                    alt="Narra Estates Azure Cliffs property detail and architectural experience"
+                    width="900"
+                    height="600"
+                    className="w-full aspect-[3/2] object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-500"
+                    loading="lazy"
+                  />
                 </a>
               </motion.div>
 
-              <motion.div
-                variants={stagger}
-                className="grid grid-cols-[repeat(4,minmax(260px,1fr))] md:grid-cols-2 xl:grid-cols-4 gap-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none pb-4 md:pb-0"
-                aria-label="Migo app screens"
-              >
-                {MIGO_PROJECT.screens.map((screen) => (
-                  <motion.figure key={screen.label} variants={fadeUp} className="snap-start min-w-0">
-                    <a
-                      href={MIGO_PROJECT.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block border border-[#242424] bg-[#101010] overflow-hidden group focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-yellow-400"
-                      aria-label={`Open Migo: ${screen.label}`}
-                    >
-                      <img
-                        src={screen.src}
-                        alt={screen.alt}
-                        width="700"
-                        height="1200"
-                        className="w-full aspect-[7/12] object-cover object-top opacity-90 group-hover:opacity-100 group-hover:scale-[1.015] transition-all duration-500"
-                        loading="lazy"
-                      />
-                    </a>
-                    <figcaption className="mono-font text-[11px] text-neutral-500 mt-4 uppercase tracking-wide">
-                      {screen.label}
-                    </figcaption>
-                  </motion.figure>
-                ))}
+              <motion.div variants={fadeUp} className="lg:col-span-12 pt-8 border-t border-[#242424]">
+                <p className="mono-font text-[10px] font-bold text-neutral-600 uppercase tracking-widest mb-5">Technology and capabilities</p>
+                <ul className="flex flex-wrap gap-x-0 gap-y-3" aria-label="Narra Estates technology and capabilities">
+                  {NARRA_ESTATES_PROJECT.technologies.map((technology, index) => (
+                    <li key={technology} className="flex items-center mono-font text-[11px] font-bold text-neutral-300 uppercase tracking-wide">
+                      {index > 0 && <span className="mx-3 text-neutral-700" aria-hidden="true">/</span>}
+                      {technology}
+                    </li>
+                  ))}
+                </ul>
               </motion.div>
-
-              <ProductProof project={MIGO_PROJECT} className="mt-12" />
             </motion.article>
           </motion.div>
         </section>

@@ -5,6 +5,7 @@ const LINKS = [
   { label: 'Home', id: 'home' },
   { label: 'Work', id: 'work' },
   { label: 'Travel Tech', id: 'frontend-dev' },
+  { label: 'Digital Experiences', id: 'digital-experiences' },
   { label: 'Services', id: 'services' },
   { label: 'About', id: 'about-me' },
   { label: 'Stack', id: 'tech-stack' },
