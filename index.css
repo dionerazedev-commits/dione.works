@@ -62,6 +62,16 @@
   transform: translateY(0);
 }
 
+[data-gsap-hero-line],
+[data-gsap-parallax] {
+  will-change: transform, opacity;
+}
+
+[data-gsap-project-card],
+[data-gsap-tech-card] {
+  transform-origin: center;
+}
+
 /* Enhanced button focus states */
 button:focus-visible {
   outline: 2px solid #f5c842;
@@ -97,6 +107,18 @@ button:hover {
     opacity: 1 !important;
     transform: none !important;
     clip-path: inset(0) !important;
+  }
+
+  [data-gsap-hero],
+  [data-gsap-section],
+  [data-gsap-project-card],
+  [data-gsap-tech-card],
+  [data-gsap-parallax] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    clip-path: inset(0) !important;
+    will-change: auto !important;
   }
 
   .scroll-progress {

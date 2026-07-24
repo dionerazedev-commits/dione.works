@@ -100,10 +100,9 @@ export const SidebarLeft: React.FC = () => {
             GitHub
           </a>
         </div>
-        <div className="grid grid-cols-3 gap-2" aria-label="Social media profiles">
+        <div className="grid grid-cols-2 gap-3" aria-label="Social media profiles">
           {[
             { href: 'https://www.instagram.com/dnrze_/', label: 'Instagram' },
-            { href: 'https://www.tiktok.com/@raze.ventures', label: 'TikTok' },
             { href: 'https://www.facebook.com/raze.dodot/', label: 'Facebook' },
           ].map(({ href, label }) => (
             <a

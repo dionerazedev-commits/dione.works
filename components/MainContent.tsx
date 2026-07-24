@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ArrowUpRight, Bot, Braces, BriefcaseBusiness, Check, Code2, Database, Download, Facebook, Github, Globe2, Instagram, Linkedin, Mail, Music2, Plug, Smartphone, Webhook as WebhookIcon, Workflow, X, ZoomIn, type LucideIcon } from 'lucide-react';
+import { ArrowUpRight, Bot, Braces, BriefcaseBusiness, Check, Code2, Database, Download, Facebook, Github, Globe2, Instagram, Linkedin, Mail, Plug, Smartphone, Webhook as WebhookIcon, Workflow, X, ZoomIn, type LucideIcon } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion';
+import { gsap, ScrollTrigger, useGSAP } from '../lib/gsap';
 
 // - Animation Variants -
 
@@ -284,6 +285,7 @@ const PROJECTS: ProjectData[] = [
 const LAAG_BUKIDNON_PROJECT = {
   title: 'Laag Bukidnon',
   link: 'https://laagbukidnon.vercel.app/',
+  sourceUrl: 'https://github.com/dionerazedev/LaagBukidnon',
   description: 'A responsive tourism platform that helps travelers discover Bukidnon, plan trips, find stays, and travel with useful local context.',
   problem: 'Bukidnon travel information is often scattered across social posts, operator pages, and disconnected guides, making it difficult to move from discovery to a practical trip plan.',
   role: 'Product design, frontend development, and responsive UX',
@@ -775,8 +777,8 @@ const ProjectCard: React.FC<{
   };
 
   return (
-    <motion.article
-      variants={fadeUp}
+    <article
+      data-gsap-project-card
       className="flex flex-col border-r border-b border-[#1a1a1a] bg-[#0c0c0c] hover:bg-[#0f0f0f] hover:border-yellow-400/20 transition-all duration-300 group h-full cursor-pointer focus-within:ring-2 focus-within:ring-yellow-400 focus-within:ring-inset relative overflow-hidden"
       role="article"
     >
@@ -815,6 +817,7 @@ const ProjectCard: React.FC<{
       {/* Image */}
       <div className="aspect-[16/11] overflow-hidden bg-[#111] relative group/img">
         <img
+          data-gsap-project-image
           src={imageUrl}
           alt={`Screenshot of ${title}`}
           className="w-full h-full object-cover opacity-85 group-hover:opacity-100 group-hover:scale-[1.05] transition-all duration-700 grayscale group-hover:grayscale-0"
@@ -852,7 +855,7 @@ const ProjectCard: React.FC<{
           </div>
         </div>
       </div>
-    </motion.article>
+    </article>
   );
 };
 
@@ -862,8 +865,8 @@ const TechCard: React.FC<{
   logo?: string;
   Icon?: LucideIcon;
 }> = ({ name, category, logo, Icon }) => (
-  <motion.div
-    variants={fadeUp}
+  <div
+    data-gsap-tech-card
     className="min-h-[132px] sm:min-h-[146px] border-r border-b border-[#1a1a1a] bg-[#0c0c0c] p-4 sm:p-5 flex flex-col justify-between hover:bg-[#111] transition-colors group"
     role="listitem"
     aria-label={`${name} - ${category}`}
@@ -883,7 +886,7 @@ const TechCard: React.FC<{
       ) : null}
     </div>
     <span className="mono-font text-[9px] text-neutral-700 self-end uppercase tracking-widest">{category}</span>
-  </motion.div>
+  </div>
 );
 
 const Testimonial: React.FC<{
@@ -936,6 +939,170 @@ export const MainContent: React.FC = () => {
   const heroParallaxY = useTransform(smoothScrollProgress, [0, 0.075], [0, -34]);
   const heroParallaxOpacity = useTransform(smoothScrollProgress, [0, 0.045, 0.09], [1, 0.88, 0.48]);
 
+  useGSAP(() => {
+    const scroller = mainRef.current;
+    if (!scroller) return;
+
+    const hero = scroller.querySelector<HTMLElement>('[data-gsap-hero]');
+    const sections = gsap.utils.toArray<HTMLElement>('[data-gsap-section]', scroller);
+    const cards = gsap.utils.toArray<HTMLElement>('[data-gsap-project-card]', scroller);
+    const techCards = gsap.utils.toArray<HTMLElement>('[data-gsap-tech-card]', scroller);
+    const parallaxImages = gsap.utils.toArray<HTMLElement>('[data-gsap-parallax]', scroller);
+    const media = gsap.utils.toArray<HTMLImageElement>('img', scroller);
+
+    const mm = gsap.matchMedia();
+    const removeImageListeners: Array<() => void> = [];
+
+    const refresh = gsap.delayedCall(0.18, () => ScrollTrigger.refresh()).pause();
+    media.forEach((image) => {
+      if (image.complete) return;
+      const onImageReady = () => refresh.restart(true);
+      image.addEventListener('load', onImageReady, { once: true });
+      image.addEventListener('error', onImageReady, { once: true });
+      removeImageListeners.push(() => {
+        image.removeEventListener('load', onImageReady);
+        image.removeEventListener('error', onImageReady);
+      });
+    });
+
+    mm.add(
+      {
+        isDesktop: '(min-width: 1024px)',
+        isTablet: '(min-width: 768px) and (max-width: 1023px)',
+        isMobile: '(max-width: 767px)',
+        reduceMotion: '(prefers-reduced-motion: reduce)',
+      },
+      (context) => {
+        const { isDesktop, isTablet, isMobile, reduceMotion } = context.conditions ?? {};
+        const distance = isMobile ? 18 : isTablet ? 26 : 34;
+        const duration = isMobile ? 0.46 : 0.72;
+
+        if (reduceMotion) {
+          gsap.set([
+            '[data-gsap-hero-label]',
+            '[data-gsap-hero-line]',
+            '[data-gsap-hero-copy]',
+            '[data-gsap-hero-actions]',
+            '[data-gsap-section]',
+            '[data-gsap-project-card]',
+            '[data-gsap-tech-card]',
+          ], { autoAlpha: 1, clearProps: 'transform,clipPath,willChange' });
+          return;
+        }
+
+        if (hero) {
+          const heroTimeline = gsap.timeline({ defaults: { duration, ease: 'power3.out' } });
+          heroTimeline
+            .from('[data-gsap-hero-label]', { autoAlpha: 0, y: 14, duration: 0.42 }, 0)
+            .from('[data-gsap-hero-line]', {
+              autoAlpha: 0,
+              y: distance + 10,
+              clipPath: 'inset(0 0 100% 0)',
+              stagger: 0.09,
+              willChange: 'transform, opacity, clip-path',
+              clearProps: 'willChange',
+            }, 0.1)
+            .from('[data-gsap-hero-copy]', { autoAlpha: 0, y: distance, willChange: 'transform, opacity', clearProps: 'willChange' }, 0.36)
+            .from('[data-gsap-hero-actions]', {
+              autoAlpha: 0,
+              y: 18,
+              scale: 0.98,
+              willChange: 'transform, opacity',
+              clearProps: 'opacity,visibility,transform,willChange',
+            }, 0.48);
+        }
+
+        sections.forEach((section) => {
+          gsap.from(section, {
+            autoAlpha: 0.92,
+            y: distance * 0.55,
+            duration,
+            ease: 'power3.out',
+            clearProps: 'opacity,visibility,transform',
+            scrollTrigger: {
+              trigger: section,
+              scroller,
+              start: 'top 82%',
+              once: true,
+            },
+          });
+        });
+
+        gsap.set(cards, { autoAlpha: 0, y: isMobile ? 16 : 30, scale: 0.992 });
+
+        ScrollTrigger.batch(cards, {
+          scroller,
+          start: 'top 88%',
+          once: true,
+          interval: 0.08,
+          batchMax: isMobile ? 2 : 5,
+          onEnter: (batch) => {
+            gsap.to(batch, {
+              autoAlpha: 1,
+              y: 0,
+              scale: 1,
+              duration,
+              stagger: 0.075,
+              ease: 'power3.out',
+              overwrite: 'auto',
+              clearProps: 'opacity,visibility,transform',
+            });
+          },
+        });
+
+        gsap.set(techCards, { autoAlpha: 0, y: 18, scale: 0.985 });
+
+        ScrollTrigger.batch(techCards, {
+          scroller,
+          start: 'top 90%',
+          once: true,
+          interval: 0.08,
+          batchMax: 8,
+          onEnter: (batch) => {
+            gsap.to(batch, {
+              autoAlpha: 1,
+              y: 0,
+              scale: 1,
+              duration: duration * 0.86,
+              stagger: 0.055,
+              ease: 'power3.out',
+              overwrite: 'auto',
+              clearProps: 'opacity,visibility,transform',
+            });
+          },
+        });
+
+        if (isDesktop) {
+          parallaxImages.forEach((image, index) => {
+            gsap.fromTo(image, {
+              yPercent: index % 2 === 0 ? -1.8 : -1,
+            }, {
+              yPercent: index % 2 === 0 ? 2.5 : 1.8,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: image,
+                scroller,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 0.7,
+              },
+            });
+          });
+        }
+
+      },
+      scroller
+    );
+
+    ScrollTrigger.refresh();
+
+    return () => {
+      refresh.kill();
+      removeImageListeners.forEach((remove) => remove());
+      mm.revert();
+    };
+  }, { scope: mainRef });
+
   const openCaseStudy = useCallback((project: ProjectData) => {
     lastFocusedRef.current = document.activeElement as HTMLElement;
     setSelectedProject(project);
@@ -976,58 +1143,64 @@ export const MainContent: React.FC = () => {
         {/* - Hero - */}
         <section
           id="home"
+          data-gsap-hero
           className="p-8 lg:px-16 lg:py-24 min-h-[68vh] flex flex-col justify-center border-b border-[#1a1a1a]"
           aria-label="Introduction"
         >
           <motion.div style={{ y: heroParallaxY, opacity: heroParallaxOpacity }}>
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
-              <motion.div variants={fadeUp} className="mono-font text-neutral-600 mb-10 text-[12px] italic" aria-hidden="true">
+            <div>
+              <div data-gsap-hero-label className="mono-font text-neutral-600 mb-10 text-[12px] italic" aria-hidden="true">
                 {'/* Hero section */'}
-              </motion.div>
+              </div>
 
-              <motion.div variants={headingReveal} className="motion-heading mb-10">
-                <h2 className="text-[42px] md:text-[clamp(36px,11cqw,96px)] font-extrabold text-white leading-[0.87] tracking-tighter uppercase whitespace-nowrap">
+              <div className="motion-heading mb-10">
+                <h2 data-gsap-hero-line className="text-[42px] md:text-[clamp(36px,11cqw,96px)] font-extrabold text-white leading-[0.87] tracking-tighter uppercase whitespace-nowrap">
                   AI Automation
                 </h2>
-                <h2 className="text-[clamp(21px,6.8cqw,78px)] font-extrabold text-neutral-700 leading-[0.87] tracking-tighter uppercase whitespace-nowrap">
-                  & Full-Stack Developer
+                <h2 data-gsap-hero-line className="text-[clamp(21px,6.8cqw,78px)] font-extrabold text-neutral-700 leading-[0.87] tracking-tighter uppercase whitespace-nowrap">
+                  & Full-Stack Engineer
                 </h2>
-              </motion.div>
+              </div>
 
-              <motion.p variants={fadeUp} className="text-lg md:text-xl mono-font leading-relaxed text-neutral-500 max-w-2xl mb-10">
+              <p data-gsap-hero-copy className="text-lg md:text-xl mono-font leading-relaxed text-neutral-500 max-w-2xl mb-10">
                 I'm an AI automation and full-stack developer. I build intelligent workflows, modern web apps, and mobile products people actually use.
-              </motion.p>
+              </p>
 
-              <motion.div variants={fadeUp} className="flex gap-3 flex-wrap">
-              <button
-                onClick={() => {
-                  const el = document.getElementById('work');
-                  const main = document.querySelector('main');
-                  if (el && main) main.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
-                }}
-                className="inline-flex items-center gap-2 px-7 py-4 bg-yellow-400 hover:bg-yellow-300 text-black mono-font font-bold text-[11px] tracking-widest uppercase transition-all duration-200 min-h-[44px] shadow-lg hover:shadow-yellow-400/50 hover:shadow-2xl hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-400 group"
-              >
-                <span>View Projects</span>
-                <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" aria-hidden="true" />
-              </button>
-              <button
-                onClick={() => {
-                  const el = document.getElementById('contact-me');
-                  const main = document.querySelector('main');
-                  if (el && main) main.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
-                }}
-                className="inline-flex items-center gap-2 px-7 py-4 border-2 border-neutral-600 hover:border-white text-neutral-400 hover:text-white mono-font font-bold text-[11px] tracking-widest uppercase transition-all duration-200 min-h-[44px] hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-400 group"
-              >
-                <span>Get in Touch</span>
-                <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" aria-hidden="true" />
-              </button>
-              </motion.div>
-            </motion.div>
+              <div data-gsap-hero-actions className="relative z-10 grid w-full max-w-[380px] grid-cols-1 gap-3 sm:flex sm:max-w-none">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const el = document.getElementById('digital-experiences');
+                    const main = document.querySelector('main');
+                    if (el && main) main.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
+                  }}
+                  className="inline-flex min-h-[54px] w-full items-center justify-center gap-2 bg-yellow-400 px-7 py-4 text-black mono-font font-bold text-[11px] tracking-widest uppercase transition-all duration-200 sm:w-auto sm:min-w-[178px] shadow-lg hover:bg-yellow-300 hover:shadow-2xl hover:shadow-yellow-400/50 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-400 group"
+                  aria-label="View featured projects"
+                >
+                  <span>View Projects</span>
+                  <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const el = document.getElementById('contact-me');
+                    const main = document.querySelector('main');
+                    if (el && main) main.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
+                  }}
+                  className="inline-flex min-h-[54px] w-full items-center justify-center gap-2 border-2 border-neutral-600 px-7 py-4 text-neutral-400 mono-font font-bold text-[11px] tracking-widest uppercase transition-all duration-200 sm:w-auto sm:min-w-[175px] hover:border-white hover:bg-white/5 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-400 group"
+                  aria-label="Go to contact section"
+                >
+                  <span>Get in Touch</span>
+                  <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" aria-hidden="true" />
+                </button>
+              </div>
+            </div>
           </motion.div>
         </section>
 
         {/* - Impact Stats - */}
         <section
+          data-gsap-section
           className="p-8 lg:px-16 lg:py-16 border-b border-[#1a1a1a]"
           aria-labelledby="impact-heading"
         >
@@ -1052,11 +1225,12 @@ export const MainContent: React.FC = () => {
           </motion.div>
         </section>
 
-        {/* - Featured Work - */}
+        {/* - Additional Automation Work - */}
         <section
-          id="work"
+          id="automation-work"
+          data-gsap-section
           className="p-6 lg:px-16 lg:py-16 border-b border-[#1a1a1a]"
-          aria-labelledby="work-heading"
+          aria-label="Automation work"
         >
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.05 }} variants={stagger}>
             <motion.div variants={fadeUp} className="mono-font text-neutral-600 mb-10 text-[12px] italic" aria-hidden="true">
@@ -1135,6 +1309,7 @@ export const MainContent: React.FC = () => {
         {/* - Low-Code Dev - */}
         <section
           id="frontend-dev"
+          data-gsap-section
           className="p-6 sm:p-8 lg:px-16 lg:py-20 border-b border-[#1a1a1a] overflow-hidden"
           aria-labelledby="frontend-heading"
         >
@@ -1142,21 +1317,21 @@ export const MainContent: React.FC = () => {
             <div className="max-w-5xl mb-10 lg:mb-12 pb-9 lg:pb-10 border-b border-[#242424]">
               <motion.div variants={fadeUp} className="flex items-center justify-between gap-6 mb-6">
                 <p className="mono-font text-[10px] text-yellow-400 uppercase tracking-widest font-bold">
-                  Product Collection
+                  Project Collection
                 </p>
-                <p className="mono-font text-[10px] text-neutral-700 uppercase tracking-widest tabular-nums" aria-label="Two live travel products">
-                  02 / Live Products
+                <p className="mono-font text-[10px] text-neutral-700 uppercase tracking-widest tabular-nums" aria-label="Two featured projects">
+                  02 / Featured Projects
                 </p>
               </motion.div>
               <motion.h2 id="frontend-heading" variants={headingReveal} className="motion-heading text-[clamp(32px,5vw,64px)] font-bold text-white tracking-tighter leading-[0.95] mb-5">
-                Travel Products in Practice
+                My Projects
               </motion.h2>
               <motion.p variants={fadeUp} className="text-[15px] md:text-[16px] mono-font leading-relaxed text-neutral-400 max-w-3xl">
-                Migo supports the full trip journey. Laag Bukidnon makes local discovery and planning easier.
+                Selected full-stack projects built around useful product flows, responsive interfaces, and practical user needs.
               </motion.p>
             </div>
 
-            <motion.article variants={stagger} className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+            <motion.article id="laag-bukidnon-project" variants={stagger} className="scroll-mt-8 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
               <motion.div variants={fadeUp} className="lg:col-span-4 lg:pt-6">
                 <p className="mono-font text-[11px] text-yellow-400 uppercase tracking-widest font-bold mb-5">
                   Local Tourism Platform
@@ -1171,16 +1346,28 @@ export const MainContent: React.FC = () => {
                   Independent destination platform designed to turn local discovery into a practical trip-planning path.
                 </p>
 
-                <a
-                  href={LAAG_BUKIDNON_PROJECT.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex w-full sm:w-auto items-center justify-center gap-3 bg-yellow-400 hover:bg-yellow-300 active:translate-y-px text-black px-6 py-4 mono-font font-bold text-[11px] uppercase tracking-widest transition-all duration-200 min-h-[44px] whitespace-nowrap group"
-                  aria-label="Visit the live Laag Bukidnon website"
-                >
-                  Visit Live Site
-                  <ArrowUpRight size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" aria-hidden="true" />
-                </a>
+                <div className="flex flex-col sm:flex-row lg:flex-col min-[1500px]:flex-row gap-3 items-stretch sm:items-start lg:items-stretch min-[1500px]:items-start">
+                  <a
+                    href={LAAG_BUKIDNON_PROJECT.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-full sm:w-auto lg:w-full min-[1500px]:w-auto items-center justify-center gap-3 bg-yellow-400 hover:bg-yellow-300 active:translate-y-px text-black px-6 py-4 mono-font font-bold text-[11px] uppercase tracking-widest transition-all duration-200 min-h-[44px] whitespace-nowrap group"
+                    aria-label="Visit the live Laag Bukidnon website"
+                  >
+                    Visit Live Site
+                    <ArrowUpRight size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" aria-hidden="true" />
+                  </a>
+                  <a
+                    href={LAAG_BUKIDNON_PROJECT.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-full sm:w-auto lg:w-full min-[1500px]:w-auto items-center justify-center gap-3 border border-[#3a3a3a] hover:border-neutral-300 active:translate-y-px text-neutral-300 hover:text-white px-6 py-4 mono-font font-bold text-[11px] uppercase tracking-widest transition-all duration-200 min-h-[44px] whitespace-nowrap group"
+                    aria-label="View the Laag Bukidnon source code on GitHub"
+                  >
+                    View Source
+                    <ArrowUpRight size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" aria-hidden="true" />
+                  </a>
+                </div>
               </motion.div>
 
               <motion.div variants={fadeUp} className="lg:col-span-8 min-w-0">
@@ -1198,6 +1385,7 @@ export const MainContent: React.FC = () => {
                     href={LAAG_BUKIDNON_PROJECT.link}
                     target="_blank"
                     rel="noopener noreferrer"
+                    data-gsap-parallax
                     className="block sm:w-[92%] border border-[#2b2b2b] bg-[#101010] overflow-hidden group shadow-[0_24px_55px_-32px_rgba(0,0,0,0.9)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-yellow-400"
                     aria-label="Open Laag Bukidnon desktop experience"
                   >
@@ -1215,6 +1403,7 @@ export const MainContent: React.FC = () => {
                     href={LAAG_BUKIDNON_PROJECT.link}
                     target="_blank"
                     rel="noopener noreferrer"
+                    data-gsap-parallax
                     className="block w-[48%] ml-auto mt-4 sm:mt-0 sm:absolute sm:right-0 sm:bottom-0 sm:w-[27%] border border-[#343434] bg-[#101010] overflow-hidden group shadow-[0_24px_55px_-24px_rgba(0,0,0,0.92)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-yellow-400"
                     aria-label="Open Laag Bukidnon mobile experience"
                   >
@@ -1246,7 +1435,7 @@ export const MainContent: React.FC = () => {
               <ProductProof project={LAAG_BUKIDNON_PROJECT} className="lg:col-span-12" />
             </motion.article>
 
-            <motion.article variants={stagger} className="mt-24 lg:mt-32 pt-16 lg:pt-20 border-t border-[#242424] grid grid-cols-1 xl:grid-cols-12 gap-10 xl:gap-12 items-start">
+            <motion.article id="migo-project" variants={stagger} className="scroll-mt-8 mt-24 lg:mt-32 pt-16 lg:pt-20 border-t border-[#242424] grid grid-cols-1 xl:grid-cols-12 gap-10 xl:gap-12 items-start">
               <motion.div variants={fadeUp} className="xl:col-span-4 xl:pt-5">
                 <p className="mono-font text-[11px] text-yellow-400 uppercase tracking-widest font-bold mb-5">
                   AI Travel Companion
@@ -1302,6 +1491,7 @@ export const MainContent: React.FC = () => {
         {/* - Digital Experiences - */}
         <section
           id="digital-experiences"
+          data-gsap-section
           className="p-6 sm:p-8 lg:px-16 lg:py-24 border-b border-[#1a1a1a] overflow-hidden"
           aria-labelledby="digital-experiences-heading"
         >
@@ -1315,7 +1505,7 @@ export const MainContent: React.FC = () => {
               </motion.p>
             </div>
 
-            <motion.article variants={stagger} className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+            <motion.article id="narra-estates-project" variants={stagger} className="scroll-mt-8 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
               <motion.div variants={fadeUp} className="lg:col-span-4 lg:pt-6">
                 <p className="mono-font text-[11px] text-yellow-400 uppercase tracking-widest font-bold mb-5">
                   Luxury Real Estate Concept
@@ -1359,6 +1549,7 @@ export const MainContent: React.FC = () => {
                   href={NARRA_ESTATES_PROJECT.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-gsap-parallax
                   className="block md:w-[91%] border border-[#242424] bg-[#101010] overflow-hidden group focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-yellow-400"
                   aria-label="Open the Narra Estates Azure Cliffs homepage"
                 >
@@ -1376,6 +1567,7 @@ export const MainContent: React.FC = () => {
                   href={`${NARRA_ESTATES_PROJECT.liveUrl}properties/azure-cliffs`}
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-gsap-parallax
                   className="block mt-4 md:mt-0 md:absolute md:right-0 md:bottom-0 md:w-[42%] border border-[#2d2d2d] bg-[#101010] overflow-hidden group focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-yellow-400"
                   aria-label="Open the Narra Estates Azure Cliffs property detail"
                 >
@@ -1408,6 +1600,7 @@ export const MainContent: React.FC = () => {
         {/* - Services & Offerings - */}
         <section
           id="services"
+          data-gsap-section
           className="relative p-6 sm:p-8 lg:px-16 lg:py-24 border-b border-[#1a1a1a]"
           aria-labelledby="services-heading"
         >
@@ -1489,6 +1682,7 @@ export const MainContent: React.FC = () => {
         {/* - About - */}
         <section
           id="about-me"
+          data-gsap-section
           className="relative p-8 lg:px-16 lg:py-24 border-b border-[#1a1a1a] overflow-hidden"
           aria-labelledby="about-heading"
         >
@@ -1530,7 +1724,7 @@ export const MainContent: React.FC = () => {
               </div>
 
               <motion.div variants={fadeUp} className="lg:col-span-5 lg:sticky lg:top-24">
-                <div className="border border-[#1e1e1e] overflow-hidden group">
+                <div data-gsap-parallax className="border border-[#1e1e1e] overflow-hidden group">
                   <img
                     src="/images/dione-profile.jpg"
                     alt="Dione Raze Oro, AI automation and full-stack developer based in Davao City, Philippines"
@@ -1545,6 +1739,7 @@ export const MainContent: React.FC = () => {
         {/* - Tech Stack - */}
         <section
           id="tech-stack"
+          data-gsap-section
           className="p-8 lg:px-16 lg:py-24 border-b border-[#1a1a1a]"
           aria-labelledby="stack-heading"
         >
@@ -1593,6 +1788,7 @@ export const MainContent: React.FC = () => {
         {/* - Certifications - */}
         <section
           id="awards"
+          data-gsap-section
           className="p-8 lg:px-16 lg:py-24 border-b border-[#1a1a1a]"
           aria-labelledby="certs-heading"
         >
@@ -1633,6 +1829,7 @@ export const MainContent: React.FC = () => {
         {/* - Testimonials - */}
         <section
           id="client-s-word"
+          data-gsap-section
           className="relative p-8 lg:px-16 lg:py-32 border-b border-[#1a1a1a] overflow-hidden"
           aria-labelledby="feedback-heading"
         >
@@ -1675,6 +1872,8 @@ export const MainContent: React.FC = () => {
         {/* - Contact - */}
         <section
           id="contact-me"
+          data-gsap-section
+          data-gsap-contact
           className="p-8 lg:px-16 lg:py-24"
           aria-labelledby="contact-heading"
         >
@@ -1712,7 +1911,6 @@ export const MainContent: React.FC = () => {
                       { href: 'https://github.com/dionerazedev-commits', label: 'GitHub', text: 'GitHub Profile', Icon: Github },
                       { href: 'https://www.linkedin.com/in/dione-raze-oro-b274a8243/', label: 'LinkedIn', text: 'LinkedIn Profile', Icon: Linkedin },
                       { href: 'https://www.instagram.com/dnrze_/', label: 'Instagram', text: '@dnrze_', Icon: Instagram },
-                      { href: 'https://www.tiktok.com/@raze.ventures', label: 'TikTok', text: '@raze.ventures', Icon: Music2 },
                       { href: 'https://www.facebook.com/raze.dodot/', label: 'Facebook', text: 'raze.dodot', Icon: Facebook },
                       { href: 'https://www.onlinejobs.ph/jobseekers/info/2465090', label: 'OnlineJobsPH', text: 'OnlineJobsPH Profile', Icon: Globe2 },
                       { href: 'https://www.upwork.com/freelancers/~019d50a01f575c8779', label: 'Upwork', text: 'Upwork Profile', Icon: BriefcaseBusiness },

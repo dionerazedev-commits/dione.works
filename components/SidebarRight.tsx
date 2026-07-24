@@ -3,7 +3,7 @@ import { motion, animate } from 'framer-motion';
 
 const LINKS = [
   { label: 'Home', id: 'home' },
-  { label: 'Work', id: 'work' },
+  { label: 'Automations', id: 'automation-work' },
   { label: 'Travel Tech', id: 'frontend-dev' },
   { label: 'Digital Experiences', id: 'digital-experiences' },
   { label: 'Services', id: 'services' },
